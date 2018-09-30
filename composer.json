@@ -1,0 +1,23 @@
+{
+	"name": "sunrise/uri",
+	"description": "Sunrise URI",
+	"keywords": ["fenric", "sunrise", "uri"],
+	"homepage": "https://github.com/sunrise-php/uri",
+	"license": "MIT",
+	"authors": [{
+		"name": "Anatoly Fenric",
+		"email": "anatoly@fenric.ru",
+		"homepage": "https://anatoly.fenric.ru/"
+	}],
+	"require": {
+		"php": ">=7.2.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^7.2"
+	},
+	"autoload": {
+		"psr-4": {
+			"Sunrise\\Uri\\": "src/"
+		}
+	}
+}
