@@ -126,7 +126,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
 	 */
@@ -136,10 +136,10 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $scheme))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "scheme"');
+			throw new UriException('Invalid URI component "scheme"');
 		}
 
-		$this->scheme = $scheme;
+		$this->scheme = \strtolower($scheme);
 
 		return $this;
 	}
@@ -147,7 +147,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
@@ -157,7 +157,7 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $username))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "username"');
+			throw new UriException('Invalid URI component "username"');
 		}
 
 		$this->username = $username;
@@ -168,7 +168,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
@@ -178,7 +178,7 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $password))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "password"');
+			throw new UriException('Invalid URI component "password"');
 		}
 
 		$this->password = $password;
@@ -189,7 +189,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
 	 */
@@ -199,10 +199,10 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $host))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "host"');
+			throw new UriException('Invalid URI component "host"');
 		}
 
-		$this->host = $host;
+		$this->host = \strtolower($host);
 
 		return $this;
 	}
@@ -210,7 +210,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 */
 	public function setPort(?int $port) : UriInterface
 	{
@@ -219,7 +219,7 @@ class Uri implements UriInterface
 
 		if (! ($port === null || ($port >= $min && $port <= $max)))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "port"');
+			throw new UriException('Invalid URI component "port"');
 		}
 
 		$this->port = $port;
@@ -230,7 +230,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
 	 */
@@ -240,7 +240,7 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $path))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "path"');
+			throw new UriException('Invalid URI component "path"');
 		}
 
 		$this->path = $path;
@@ -251,7 +251,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
 	 */
@@ -261,7 +261,7 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $query))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "query"');
+			throw new UriException('Invalid URI component "query"');
 		}
 
 		$this->query = $query;
@@ -272,7 +272,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \InvalidArgumentException
+	 * @throws \Sunrise\Uri\UriException
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
 	 */
@@ -282,7 +282,7 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $fragment))
 		{
-			throw new \InvalidArgumentException('Invalid URI component "fragment"');
+			throw new UriException('Invalid URI component "fragment"');
 		}
 
 		$this->fragment = $fragment;
