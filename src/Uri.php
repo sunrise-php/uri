@@ -12,12 +12,24 @@
 namespace Sunrise\Uri;
 
 /**
+ * Import classes
+ */
+use Sunrise\Collection\Collection;
+
+/**
  * Uri
  *
  * @package Sunrise\Uri
  */
 class Uri implements UriInterface
 {
+
+	/**
+	 * Payload of the URI
+	 *
+	 * @var \Sunrise\Collection\Collection
+	 */
+	protected $payload;
 
 	/**
 	 * Scheme of the URI
@@ -81,6 +93,8 @@ class Uri implements UriInterface
 	public function __construct(string $uri)
 	{
 		$components = \parse_url($uri);
+
+		$this->payload = new Collection();
 
 		if (\array_key_exists('scheme', $components))
 		{
@@ -266,6 +280,10 @@ class Uri implements UriInterface
 
 		$this->query = $query;
 
+		\parse_str(\rawurldecode($query), $payload);
+
+		$this->getPayload()->clear()->update($payload);
+
 		return $this;
 	}
 
@@ -288,6 +306,14 @@ class Uri implements UriInterface
 		$this->fragment = $fragment;
 
 		return $this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getPayload() : Collection
+	{
+		return $this->payload;
 	}
 
 	/**

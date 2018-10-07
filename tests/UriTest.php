@@ -3,7 +3,10 @@
 namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Sunrise\Uri\{Uri, UriException, UriInterface};
+use Sunrise\Collection\Collection;
+use Sunrise\Uri\Uri;
+use Sunrise\Uri\UriException;
+use Sunrise\Uri\UriInterface;
 
 class UriTest extends TestCase
 {
@@ -19,6 +22,13 @@ class UriTest extends TestCase
 	}
 
 	// Getters...
+
+	public function testGetPayload()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$this->assertInstanceOf(Collection::class, $uri->getPayload());
+	}
 
 	public function testGetScheme()
 	{
@@ -82,7 +92,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setScheme('new-scheme');
+		$this->assertInstanceOf(UriInterface::class, $uri->setScheme('new-scheme'));
 
 		$this->assertEquals('new-scheme', $uri->getScheme());
 	}
@@ -91,7 +101,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setUsername('new-username');
+		$this->assertInstanceOf(UriInterface::class, $uri->setUsername('new-username'));
 
 		$this->assertEquals('new-username', $uri->getUsername());
 	}
@@ -100,7 +110,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setPassword('new-password');
+		$this->assertInstanceOf(UriInterface::class, $uri->setPassword('new-password'));
 
 		$this->assertEquals('new-password', $uri->getPassword());
 	}
@@ -109,7 +119,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setHost('new-host');
+		$this->assertInstanceOf(UriInterface::class, $uri->setHost('new-host'));
 
 		$this->assertEquals('new-host', $uri->getHost());
 	}
@@ -118,7 +128,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setPort(80);
+		$this->assertInstanceOf(UriInterface::class, $uri->setPort(80));
 
 		$this->assertEquals(80, $uri->getPort());
 	}
@@ -127,7 +137,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setPath('/new-path');
+		$this->assertInstanceOf(UriInterface::class, $uri->setPath('/new-path'));
 
 		$this->assertEquals('/new-path', $uri->getPath());
 	}
@@ -136,16 +146,18 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setQuery('new-query');
+		$this->assertInstanceOf(UriInterface::class, $uri->setQuery('new-query'));
 
 		$this->assertEquals('new-query', $uri->getQuery());
+
+		$this->assertEquals(['new-query' => ''], $uri->getPayload()->toArray());
 	}
 
 	public function testSetFragment()
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setFragment('new-fragment');
+		$this->assertInstanceOf(UriInterface::class, $uri->setFragment('new-fragment'));
 
 		$this->assertEquals('new-fragment', $uri->getFragment());
 	}
@@ -213,6 +225,8 @@ class UriTest extends TestCase
 		$uri->setQuery('');
 
 		$this->assertEquals('', $uri->getQuery());
+
+		$this->assertEquals([], $uri->getPayload()->toArray());
 	}
 
 	public function testSetEmptyFragment()
@@ -364,5 +378,14 @@ class UriTest extends TestCase
 		$uri->setHost('LOCALHOST');
 
 		$this->assertEquals('localhost', $uri->getHost());
+	}
+
+	// Payload...
+
+	public function testPayload()
+	{
+		$uri = new Uri('/?string=value&array%5B%5D=1&array%5B%5D=2&array%5B%5D=3');
+
+		$this->assertEquals(['string' => 'value', 'array' => [1, 2, 3]], $uri->getPayload()->toArray());
 	}
 }
