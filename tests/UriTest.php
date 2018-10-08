@@ -3,7 +3,7 @@
 namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Sunrise\Collection\Collection;
+use Sunrise\Collection\CollectionInterface;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
 use Sunrise\Uri\Uri;
@@ -35,7 +35,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertInstanceOf(Collection::class, $uri->getPayload());
+		$this->assertInstanceOf(CollectionInterface::class, $uri->getPayload());
 	}
 
 	public function testGetScheme()

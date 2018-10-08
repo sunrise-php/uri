@@ -14,7 +14,7 @@ namespace Sunrise\Uri;
 /**
  * Import classes
  */
-use Sunrise\Collection\Collection;
+use Sunrise\Collection\CollectionInterface;
 
 /**
  * UriInterface
@@ -90,7 +90,7 @@ interface UriInterface
 	/**
 	 * Gets the URI payload
 	 */
-	public function getPayload() : Collection;
+	public function getPayload() : CollectionInterface;
 
 	/**
 	 * Gets the URI component "scheme"

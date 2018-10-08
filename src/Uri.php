@@ -15,6 +15,7 @@ namespace Sunrise\Uri;
  * Import classes
  */
 use Sunrise\Collection\Collection;
+use Sunrise\Collection\CollectionInterface;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
 
@@ -29,7 +30,7 @@ class Uri implements UriInterface
 	/**
 	 * Payload of the URI
 	 *
-	 * @var \Sunrise\Collection\Collection
+	 * @var \Sunrise\Collection\CollectionInterface
 	 */
 	protected $payload;
 
@@ -300,7 +301,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getPayload() : Collection
+	public function getPayload() : CollectionInterface
 	{
 		return $this->payload;
 	}
