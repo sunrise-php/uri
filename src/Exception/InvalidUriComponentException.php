@@ -9,7 +9,7 @@
  * @link https://github.com/sunrise-php/uri
  */
 
-namespace Sunrise\Uri;
+namespace Sunrise\Uri\Exception;
 
 /**
  * Import classes
@@ -17,9 +17,9 @@ namespace Sunrise\Uri;
 use RuntimeException;
 
 /**
- * UriException
+ * InvalidUriComponentException
  *
  * @package Sunrise\Uri
  */
-class UriException extends RuntimeException
+class InvalidUriComponentException extends RuntimeException
 {}

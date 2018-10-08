@@ -15,6 +15,8 @@ namespace Sunrise\Uri;
  * Import classes
  */
 use Sunrise\Collection\Collection;
+use Sunrise\Uri\Exception\InvalidUriComponentException;
+use Sunrise\Uri\Exception\InvalidUriException;
 
 /**
  * Uri
@@ -90,7 +92,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \Sunrise\Uri\UriException
+	 * @throws \Sunrise\Uri\Exception\InvalidUriException
 	 */
 	public function __construct(string $uri)
 	{
@@ -98,7 +100,7 @@ class Uri implements UriInterface
 
 		if ($components === false)
 		{
-			throw new UriException('Unable to parse URI');
+			throw new InvalidUriException('Unable to parse URI');
 		}
 
 		$this->payload = new Collection();
@@ -147,7 +149,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \Sunrise\Uri\UriException
+	 * @throws \Sunrise\Uri\Exception\InvalidUriComponentException
 	 */
 	public function setScheme(string $scheme) : UriInterface
 	{
@@ -155,7 +157,7 @@ class Uri implements UriInterface
 
 		if (! \preg_match($regex, $scheme))
 		{
-			throw new UriException('Invalid URI component "scheme"');
+			throw new InvalidUriComponentException('Invalid URI component "scheme"');
 		}
 
 		$this->scheme = \strtolower($scheme);
@@ -220,7 +222,7 @@ class Uri implements UriInterface
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws \Sunrise\Uri\UriException
+	 * @throws \Sunrise\Uri\Exception\InvalidUriComponentException
 	 */
 	public function setPort(?int $port) : UriInterface
 	{
@@ -229,7 +231,7 @@ class Uri implements UriInterface
 
 		if (! ($port === null || ($port >= $min && $port <= $max)))
 		{
-			throw new UriException('Invalid URI component "port"');
+			throw new InvalidUriComponentException('Invalid URI component "port"');
 		}
 
 		$this->port = $port;

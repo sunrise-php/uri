@@ -4,8 +4,9 @@ namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Sunrise\Collection\Collection;
+use Sunrise\Uri\Exception\InvalidUriComponentException;
+use Sunrise\Uri\Exception\InvalidUriException;
 use Sunrise\Uri\Uri;
-use Sunrise\Uri\UriException;
 use Sunrise\Uri\UriInterface;
 
 class UriTest extends TestCase
@@ -23,7 +24,7 @@ class UriTest extends TestCase
 
 	public function testConstructorWithInvalidUri()
 	{
-		$this->expectException(UriException::class);
+		$this->expectException(InvalidUriException::class);
 
 		$uri = new Uri(':');
 	}
@@ -249,7 +250,7 @@ class UriTest extends TestCase
 
 	public function testSetInvalidScheme()
 	{
-		$this->expectException(UriException::class);
+		$this->expectException(InvalidUriComponentException::class);
 
 		$uri = new Uri(self::TEST_URI);
 
@@ -285,7 +286,7 @@ class UriTest extends TestCase
 
 	public function testSetInvalidPortWhichIsLessThanZero()
 	{
-		$this->expectException(UriException::class);
+		$this->expectException(InvalidUriComponentException::class);
 
 		$uri = new Uri(self::TEST_URI);
 
@@ -294,7 +295,7 @@ class UriTest extends TestCase
 
 	public function testSetInvalidPortWhichIsZero()
 	{
-		$this->expectException(UriException::class);
+		$this->expectException(InvalidUriComponentException::class);
 
 		$uri = new Uri(self::TEST_URI);
 
@@ -303,7 +304,7 @@ class UriTest extends TestCase
 
 	public function testSetInvalidPortWhichIsTooLarge()
 	{
-		$this->expectException(UriException::class);
+		$this->expectException(InvalidUriComponentException::class);
 
 		$uri = new Uri(self::TEST_URI);
 
