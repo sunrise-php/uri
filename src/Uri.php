@@ -89,49 +89,56 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @throws \Sunrise\Uri\UriException
 	 */
 	public function __construct(string $uri)
 	{
 		$components = \parse_url($uri);
 
+		if ($components === false)
+		{
+			throw new UriException('Unable to parse URI');
+		}
+
 		$this->payload = new Collection();
 
-		if (\array_key_exists('scheme', $components))
+		if (isset($components['scheme']))
 		{
 			$this->setScheme($components['scheme']);
 		}
 
-		if (\array_key_exists('user', $components))
+		if (isset($components['user']))
 		{
 			$this->setUsername($components['user']);
 		}
 
-		if (\array_key_exists('pass', $components))
+		if (isset($components['pass']))
 		{
 			$this->setPassword($components['pass']);
 		}
 
-		if (\array_key_exists('host', $components))
+		if (isset($components['host']))
 		{
 			$this->setHost($components['host']);
 		}
 
-		if (\array_key_exists('port', $components))
+		if (isset($components['port']))
 		{
 			$this->setPort($components['port']);
 		}
 
-		if (\array_key_exists('path', $components))
+		if (isset($components['path']))
 		{
 			$this->setPath($components['path']);
 		}
 
-		if (\array_key_exists('query', $components))
+		if (isset($components['query']))
 		{
 			$this->setQuery($components['query']);
 		}
 
-		if (\array_key_exists('fragment', $components))
+		if (isset($components['fragment']))
 		{
 			$this->setFragment($components['fragment']);
 		}
@@ -141,12 +148,10 @@ class Uri implements UriInterface
 	 * {@inheritDoc}
 	 *
 	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
 	 */
 	public function setScheme(string $scheme) : UriInterface
 	{
-		$regex = '/^(?:[A-Z][A-Z0-9\+\-\.]*)?$/i';
+		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
 
 		if (! \preg_match($regex, $scheme))
 		{
@@ -160,19 +165,16 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
 	public function setUsername(string $username) : UriInterface
 	{
-		$regex = '/^(?:%[A-F0-9]{2}|[A-Z0-9\-\._~\!\$&\'\(\)\*\+,;\=])*$/i';
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
-		if (! \preg_match($regex, $username))
+		$username = \preg_replace_callback($regex, function($match)
 		{
-			throw new UriException('Invalid URI component "username"');
-		}
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $username);
 
 		$this->username = $username;
 
@@ -181,19 +183,16 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
 	public function setPassword(string $password) : UriInterface
 	{
-		$regex = '/^(?:%[A-F0-9]{2}|[A-Z0-9\-\._~\!\$&\'\(\)\*\+,;\=])*$/i';
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
-		if (! \preg_match($regex, $password))
+		$password = \preg_replace_callback($regex, function($match)
 		{
-			throw new UriException('Invalid URI component "password"');
-		}
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $password);
 
 		$this->password = $password;
 
@@ -202,19 +201,16 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
 	 */
 	public function setHost(string $host) : UriInterface
 	{
-		$regex = '/^(?:%[A-F0-9]{2}|[A-Z0-9\-\._~\!\$&\'\(\)\*\+,;\=])*$/i';
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
-		if (! \preg_match($regex, $host))
+		$host = \preg_replace_callback($regex, function($match)
 		{
-			throw new UriException('Invalid URI component "host"');
-		}
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $host);
 
 		$this->host = \strtolower($host);
 
@@ -243,19 +239,16 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
 	 */
 	public function setPath(string $path) : UriInterface
 	{
-		$regex = '/^(?:%[A-F0-9]{2}|[A-Z0-9\-\._~\!\$&\'\(\)\*\+,;\=\:@\/])*$/i';
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/]+)|(.?))/u';
 
-		if (! \preg_match($regex, $path))
+		$path = \preg_replace_callback($regex, function($match)
 		{
-			throw new UriException('Invalid URI component "path"');
-		}
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $path);
 
 		$this->path = $path;
 
@@ -264,19 +257,16 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
 	 */
 	public function setQuery(string $query) : UriInterface
 	{
-		$regex = '/^(?:%[A-F0-9]{2}|[A-Z0-9\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?])*$/i';
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
 
-		if (! \preg_match($regex, $query))
+		$query = \preg_replace_callback($regex, function($match)
 		{
-			throw new UriException('Invalid URI component "query"');
-		}
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $query);
 
 		$this->query = $query;
 
@@ -289,19 +279,16 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\UriException
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
 	 */
 	public function setFragment(string $fragment) : UriInterface
 	{
-		$regex = '/^(?:%[A-F0-9]{2}|[A-Z0-9\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?])*$/i';
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
 
-		if (! \preg_match($regex, $fragment))
+		$fragment = \preg_replace_callback($regex, function($match)
 		{
-			throw new UriException('Invalid URI component "fragment"');
-		}
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $fragment);
 
 		$this->fragment = $fragment;
 

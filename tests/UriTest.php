@@ -21,6 +21,13 @@ class UriTest extends TestCase
 		$this->assertInstanceOf(UriInterface::class, $uri);
 	}
 
+	public function testConstructorWithInvalidUri()
+	{
+		$this->expectException(UriException::class);
+
+		$uri = new Uri(':');
+	}
+
 	// Getters...
 
 	public function testGetPayload()
@@ -251,29 +258,29 @@ class UriTest extends TestCase
 
 	public function testSetInvalidUsername()
 	{
-		$this->expectException(UriException::class);
-
 		$uri = new Uri(self::TEST_URI);
 
 		$uri->setUsername('username:password');
+
+		$this->assertEquals('username%3Apassword', $uri->getUsername(), '', 0.0, 10, false, true);
 	}
 
 	public function testSetInvalidPassword()
 	{
-		$this->expectException(UriException::class);
-
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setPassword('username:password:');
+		$uri->setPassword('username:password');
+
+		$this->assertEquals('username%3Apassword', $uri->getPassword(), '', 0.0, 10, false, true);
 	}
 
 	public function testSetInvalidHost()
 	{
-		$this->expectException(UriException::class);
-
 		$uri = new Uri(self::TEST_URI);
 
 		$uri->setHost('localhost:80');
+
+		$this->assertEquals('localhost%3A80', $uri->getHost(), '', 0.0, 10, false, true);
 	}
 
 	public function testSetInvalidPortWhichIsLessThanZero()
@@ -294,7 +301,7 @@ class UriTest extends TestCase
 		$uri->setPort(0);
 	}
 
-	public function testSetInvalidPortWhichIsGreaterThanTheMaximum()
+	public function testSetInvalidPortWhichIsTooLarge()
 	{
 		$this->expectException(UriException::class);
 
@@ -305,29 +312,29 @@ class UriTest extends TestCase
 
 	public function testSetInvalidPath()
 	{
-		$this->expectException(UriException::class);
-
 		$uri = new Uri(self::TEST_URI);
 
 		$uri->setPath('/path?query');
+
+		$this->assertEquals('/path%3Fquery', $uri->getPath(), '', 0.0, 10, false, true);
 	}
 
 	public function testSetInvalidQuery()
 	{
-		$this->expectException(UriException::class);
-
 		$uri = new Uri(self::TEST_URI);
 
 		$uri->setQuery('query#fragment');
+
+		$this->assertEquals('query%23fragment', $uri->getQuery(), '', 0.0, 10, false, true);
 	}
 
 	public function testSetInvalidFragment()
 	{
-		$this->expectException(UriException::class);
-
 		$uri = new Uri(self::TEST_URI);
 
 		$uri->setFragment('fragment#another-fragment');
+
+		$this->assertEquals('fragment%23another-fragment', $uri->getFragment(), '', 0.0, 10, false, true);
 	}
 
 	// Builds...
@@ -337,6 +344,15 @@ class UriTest extends TestCase
 		$uri = new Uri(self::TEST_URI);
 
 		$this->assertEquals('username:password', $uri->getUserInfo());
+
+		$uri->setPassword('');
+		$this->assertEquals('username', $uri->getUserInfo());
+
+		$uri->setUsername('');
+		$this->assertEquals('', $uri->getUserInfo());
+
+		$uri->setPassword('password');
+		$this->assertEquals('', $uri->getUserInfo());
 	}
 
 	public function testBuildHostPort()
@@ -344,6 +360,15 @@ class UriTest extends TestCase
 		$uri = new Uri(self::TEST_URI);
 
 		$this->assertEquals('localhost:3000', $uri->getHostPort());
+
+		$uri->setPort(null);
+		$this->assertEquals('localhost', $uri->getHostPort());
+
+		$uri->setHost('');
+		$this->assertEquals('', $uri->getHostPort());
+
+		$uri->setPort(3000);
+		$this->assertEquals('', $uri->getHostPort());
 	}
 
 	public function testBuildAuthority()
@@ -387,5 +412,14 @@ class UriTest extends TestCase
 		$uri = new Uri('/?string=value&array%5B%5D=1&array%5B%5D=2&array%5B%5D=3');
 
 		$this->assertEquals(['string' => 'value', 'array' => [1, 2, 3]], $uri->getPayload()->toArray());
+	}
+
+	public function testUpdatePayload()
+	{
+		$uri = new Uri('/?string=value');
+
+		$uri->setQuery('new-string=new-value');
+
+		$this->assertEquals(['new-string' => 'new-value'], $uri->getPayload()->toArray());
 	}
 }

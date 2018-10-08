@@ -12,9 +12,16 @@
 namespace Sunrise\Uri;
 
 /**
+ * Import classes
+ */
+use Sunrise\Collection\Collection;
+
+/**
  * UriInterface
  *
  * @package Sunrise\Uri
+ *
+ * @link https://tools.ietf.org/html/rfc3986
  */
 interface UriInterface
 {
@@ -26,43 +33,64 @@ interface UriInterface
 
 	/**
 	 * Sets the URI component "scheme"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
 	 */
 	public function setScheme(string $scheme) : UriInterface;
 
 	/**
 	 * Sets the URI component "username"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
 	public function setUsername(string $username) : UriInterface;
 
 	/**
 	 * Sets the URI component "password"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
 	public function setPassword(string $password) : UriInterface;
 
 	/**
 	 * Sets the URI component "host"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
 	 */
 	public function setHost(string $host) : UriInterface;
 
 	/**
 	 * Sets the URI component "port"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.3
 	 */
 	public function setPort(?int $port) : UriInterface;
 
 	/**
 	 * Sets the URI component "path"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
 	 */
 	public function setPath(string $path) : UriInterface;
 
 	/**
 	 * Sets the URI component "query"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
 	 */
 	public function setQuery(string $query) : UriInterface;
 
 	/**
 	 * Sets the URI component "fragment"
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
 	 */
 	public function setFragment(string $fragment) : UriInterface;
+
+	/**
+	 * Gets the URI payload
+	 */
+	public function getPayload() : Collection;
 
 	/**
 	 * Gets the URI component "scheme"
