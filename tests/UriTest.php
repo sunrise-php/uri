@@ -4,6 +4,7 @@ namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Sunrise\Collection\CollectionInterface;
+use Sunrise\Uri\Exception\Exception;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
 use Sunrise\Uri\Uri;
@@ -26,7 +27,7 @@ class UriTest extends TestCase
 	{
 		$this->expectException(InvalidUriException::class);
 
-		$uri = new Uri(':');
+		new Uri(':');
 	}
 
 	// Getters...
@@ -422,5 +423,28 @@ class UriTest extends TestCase
 		$uri->setQuery('new-string=new-value');
 
 		$this->assertEquals(['new-string' => 'new-value'], $uri->getPayload()->toArray());
+	}
+
+	// Exceptions...
+
+	public function testException()
+	{
+		$this->expectException(\RuntimeException::class);
+
+		new Uri(':');
+	}
+
+	public function testInvalidUriException()
+	{
+		$this->expectException(Exception::class);
+
+		new Uri(':');
+	}
+
+	public function testInvalidUriComponentException()
+	{
+		$this->expectException(Exception::class);
+
+		(new Uri(self::TEST_URI))->setScheme('scheme://');
 	}
 }

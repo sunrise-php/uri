@@ -12,9 +12,14 @@
 namespace Sunrise\Uri\Exception;
 
 /**
- * InvalidUriException
+ * Import classes
+ */
+use RuntimeException;
+
+/**
+ * Exception
  *
  * @package Sunrise\Uri
  */
-class InvalidUriException extends Exception
+class Exception extends RuntimeException
 {}

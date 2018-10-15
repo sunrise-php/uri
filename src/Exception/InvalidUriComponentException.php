@@ -12,14 +12,9 @@
 namespace Sunrise\Uri\Exception;
 
 /**
- * Import classes
- */
-use RuntimeException;
-
-/**
  * InvalidUriComponentException
  *
  * @package Sunrise\Uri
  */
-class InvalidUriComponentException extends RuntimeException
+class InvalidUriComponentException extends Exception
 {}
