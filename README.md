@@ -19,13 +19,13 @@ try
 {
     $uri = new \Sunrise\Uri\Uri('http://user:pass@localhost:3000/path?key=value#fragment');
 }
-catch (\Sunrise\Uri\Exception\InvalidUriComponentException $e)
-{
-    // Invalid URI component...
-}
 catch (\Sunrise\Uri\Exception\InvalidUriException $e)
 {
     // Invalid URI...
+}
+catch (\Sunrise\Uri\Exception\InvalidUriComponentException $e)
+{
+    // Invalid URI component...
 }
 catch (\Sunrise\Uri\Exception\Exception $e)
 {
