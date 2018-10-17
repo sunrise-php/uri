@@ -6,6 +6,10 @@
 [![Total Downloads](https://poser.pugx.org/sunrise/uri/downloads)](https://packagist.org/packages/sunrise/uri)
 [![License](https://poser.pugx.org/sunrise/uri/license)](https://packagist.org/packages/sunrise/uri)
 
+## Awards
+
+[![SymfonyInsight](https://insight.symfony.com/projects/967729eb-31ed-42e0-be84-b738e87c36d2/big.svg)](https://insight.symfony.com/projects/967729eb-31ed-42e0-be84-b738e87c36d2)
+
 ## Installation
 
 ```
