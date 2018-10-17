@@ -1,6 +1,6 @@
 # Sunrise URI
 
-[![Build Status](https://api.travis-ci.org/sunrise-php/uri.svg?branch=master)](https://travis-ci.org/sunrise-php/uri)
+[![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
 [![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
 [![Latest Stable Version](https://poser.pugx.org/sunrise/uri/v/stable)](https://packagist.org/packages/sunrise/uri)
 [![Total Downloads](https://poser.pugx.org/sunrise/uri/downloads)](https://packagist.org/packages/sunrise/uri)
@@ -46,3 +46,7 @@ $uri->getHostPort(); // Returns "localhost:3000"
 $uri->getAuthority(); // Returns "user:pass@localhost:3000"
 $uri->toString(); // Returns "http://user:pass@localhost:3000/path?key=value#fragment"
 ```
+
+## Useful links
+
+https://tools.ietf.org/html/rfc3986
