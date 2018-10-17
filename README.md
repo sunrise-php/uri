@@ -1,4 +1,4 @@
-# Sunrise URI
+# Sunrise URI (Uniform Resource Identifier)
 
 [![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
 [![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
@@ -16,7 +16,7 @@
 composer require sunrise/uri
 ```
 
-## Usage
+## How to use
 
 ```php
 try
