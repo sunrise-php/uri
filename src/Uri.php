@@ -20,9 +20,7 @@ use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
 
 /**
- * Uri
- *
- * @package Sunrise\Uri
+ * Uniform Resource Identifier
  */
 class Uri implements UriInterface
 {
@@ -30,7 +28,7 @@ class Uri implements UriInterface
 	/**
 	 * Payload of the URI
 	 *
-	 * @var \Sunrise\Collection\CollectionInterface
+	 * @var CollectionInterface
 	 */
 	protected $payload;
 
@@ -92,8 +90,6 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\Exception\InvalidUriException
 	 */
 	public function __construct(string $uri)
 	{
@@ -149,8 +145,6 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\Exception\InvalidUriComponentException
 	 */
 	public function setScheme(string $scheme) : UriInterface
 	{
@@ -222,8 +216,6 @@ class Uri implements UriInterface
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @throws \Sunrise\Uri\Exception\InvalidUriComponentException
 	 */
 	public function setPort(?int $port) : UriInterface
 	{

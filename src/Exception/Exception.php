@@ -18,8 +18,6 @@ use RuntimeException;
 
 /**
  * Exception
- *
- * @package Sunrise\Uri
  */
 class Exception extends RuntimeException
 {}

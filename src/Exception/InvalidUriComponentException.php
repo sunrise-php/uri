@@ -13,8 +13,6 @@ namespace Sunrise\Uri\Exception;
 
 /**
  * InvalidUriComponentException
- *
- * @package Sunrise\Uri
  */
 class InvalidUriComponentException extends Exception
 {}
