@@ -51,6 +51,10 @@ $uri->getAuthority(); // Returns "user:pass@localhost:3000"
 $uri->toString(); // Returns "http://user:pass@localhost:3000/path?key=value#fragment"
 ```
 
+## Api documentation
+
+https://phpdoc.fenric.ru/
+
 ## Useful links
 
 https://tools.ietf.org/html/rfc3986
