@@ -1,4 +1,4 @@
-# :globe_with_meridians: Sunrise URI (Uniform Resource Identifier)
+# Sunrise URI (Uniform Resource Identifier)
 
 [![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
 [![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
