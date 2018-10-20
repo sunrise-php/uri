@@ -59,4 +59,7 @@ https://phpdoc.fenric.ru/
 
 https://tools.ietf.org/html/rfc3986
 
-###### With :heart: for you
+&nbsp;
+&nbsp;
+
+With :heart: for you
