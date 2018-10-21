@@ -1,4 +1,4 @@
-# Sunrise URI (Uniform Resource Identifier)
+# URI Interface for PHP 7.2+ based on RFC-3986
 
 [![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
 [![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
@@ -36,19 +36,21 @@ catch (\Sunrise\Uri\Exception\Exception $e)
     // Any URI error...
 }
 
-$uri->getPayload()->get('key'); // Returns "value"
-$uri->getScheme(); // Returns "http"
-$uri->getUsername(); // Returns "user"
-$uri->getPassword(); // Returns "pass"
-$uri->getHost(); // Returns "localhost"
-$uri->getPort(); // Returns "3000"
-$uri->getPath(); // Returns "/path"
-$uri->getQuery(); // Returns "key=value"
-$uri->getFragment(); // Returns "fragment"
-$uri->getUserInfo(); // Returns "user:pass"
-$uri->getHostPort(); // Returns "localhost:3000"
-$uri->getAuthority(); // Returns "user:pass@localhost:3000"
-$uri->toString(); // Returns "http://user:pass@localhost:3000/path?key=value#fragment"
+$uri->getScheme();
+$uri->getUsername();
+$uri->getPassword();
+$uri->getHost();
+$uri->getPort();
+$uri->getPath();
+$uri->getQuery();
+$uri->getFragment();
+$uri->getUserInfo();
+$uri->getHostPort();
+$uri->getAuthority();
+$uri->toString();
+
+// Payload Collection
+$uri->getPayload()->get('key');
 ```
 
 ## Api documentation
@@ -58,8 +60,3 @@ https://phpdoc.fenric.ru/
 ## Useful links
 
 https://tools.ietf.org/html/rfc3986
-
-&nbsp;
-&nbsp;
-
-With :heart: for you
