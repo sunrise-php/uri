@@ -507,8 +507,11 @@ class Uri implements UriInterface
 	 */
 	public function withScheme($scheme) : UriInterface
 	{
-		return (clone $this)
-		->setScheme($scheme);
+		$clone = clone $this;
+
+		$clone->setScheme($scheme);
+
+		return $clone;
 	}
 
 	/**
@@ -516,15 +519,16 @@ class Uri implements UriInterface
 	 */
 	public function withUserInfo($username, $password = null) : UriInterface
 	{
-		if (null === $password)
+		$clone = clone $this;
+
+		$clone->setUsername($username);
+
+		if (! (null === $password))
 		{
-			return (clone $this)
-			->setUsername($username);
+			$clone->setPassword($password);
 		}
 
-		return (clone $this)
-		->setUsername($username)
-		->setPassword($password);
+		return $clone;
 	}
 
 	/**
@@ -532,8 +536,11 @@ class Uri implements UriInterface
 	 */
 	public function withHost($host) : UriInterface
 	{
-		return (clone $this)
-		->setHost($host);
+		$clone = clone $this;
+
+		$clone->setHost($host);
+
+		return $clone;
 	}
 
 	/**
@@ -541,8 +548,11 @@ class Uri implements UriInterface
 	 */
 	public function withPort($port) : UriInterface
 	{
-		return (clone $this)
-		->setPort($port);
+		$clone = clone $this;
+
+		$clone->setPort($port);
+
+		return $clone;
 	}
 
 	/**
@@ -550,8 +560,11 @@ class Uri implements UriInterface
 	 */
 	public function withPath($path) : UriInterface
 	{
-		return (clone $this)
-		->setPath($path);
+		$clone = clone $this;
+
+		$clone->setPath($path);
+
+		return $clone;
 	}
 
 	/**
@@ -559,8 +572,11 @@ class Uri implements UriInterface
 	 */
 	public function withQuery($query) : UriInterface
 	{
-		return (clone $this)
-		->setQuery($query);
+		$clone = clone $this;
+
+		$clone->setQuery($query);
+
+		return $clone;
 	}
 
 	/**
@@ -568,8 +584,11 @@ class Uri implements UriInterface
 	 */
 	public function withFragment($fragment) : UriInterface
 	{
-		return (clone $this)
-		->setFragment($fragment);
+		$clone = clone $this;
+
+		$clone->setFragment($fragment);
+
+		return $clone;
 	}
 
 	/**
