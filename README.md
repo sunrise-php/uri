@@ -1,4 +1,4 @@
-# URI wrapper for PHP 7.2+ based on RFC-3986, PSR-7 & PSR-17
+## URI wrapper for PHP 7.2+ based on RFC-3986, PSR-7 & PSR-17
 
 [![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
 [![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
