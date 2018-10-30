@@ -101,7 +101,7 @@ class Uri implements UriInterface
 	{
 		$this->payload = new Collection();
 
-		if (! ('' === $uri))
+		if (!('' === $uri))
 		{
 			$this->parse($uri);
 		}
@@ -122,7 +122,7 @@ class Uri implements UriInterface
 	{
 		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
 
-		if (! \preg_match($regex, $scheme))
+		if (!\preg_match($regex, $scheme))
 		{
 			throw new InvalidUriComponentException('Invalid URI component "scheme"');
 		}
@@ -220,7 +220,7 @@ class Uri implements UriInterface
 		$min = 1;
 		$max = 2 ** 16;
 
-		if (! ($port === null || ($port >= $min && $port <= $max)))
+		if (!($port === null || ($port >= $min && $port <= $max)))
 		{
 			throw new InvalidUriComponentException('Invalid URI component "port"');
 		}
@@ -405,11 +405,11 @@ class Uri implements UriInterface
 	{
 		$result = '';
 
-		if (! ($this->getUsername() === ''))
+		if (!($this->getUsername() === ''))
 		{
 			$result .= $this->getUsername();
 
-			if (! ($this->getPassword() === ''))
+			if (!($this->getPassword() === ''))
 			{
 				$result .= ':' . $this->getPassword();
 			}
@@ -427,11 +427,11 @@ class Uri implements UriInterface
 	{
 		$result = '';
 
-		if (! ($this->getHost() === ''))
+		if (!($this->getHost() === ''))
 		{
 			$result .= $this->getHost();
 
-			if (! ($this->getPort() === null))
+			if (!($this->getPort() === null))
 			{
 				$result .= ':' . $this->getPort();
 			}
@@ -451,11 +451,11 @@ class Uri implements UriInterface
 
 		$hostport = $this->getHostPort();
 
-		if (! ($hostport === ''))
+		if (!($hostport === ''))
 		{
 			$userinfo = $this->getUserInfo();
 
-			if (! ($userinfo === ''))
+			if (!($userinfo === ''))
 			{
 				$result .= $userinfo . '@';
 			}
@@ -475,26 +475,26 @@ class Uri implements UriInterface
 	{
 		$result = '';
 
-		if (! ($this->getScheme() === ''))
+		if (!($this->getScheme() === ''))
 		{
 			$result .= $this->getScheme() . ':';
 		}
 
 		$authority = $this->getAuthority();
 
-		if (! ($authority === ''))
+		if (!($authority === ''))
 		{
 			$result .= '//' . $authority;
 		}
 
 		$result .= $this->getPath();
 
-		if (! ($this->getQuery() === ''))
+		if (!($this->getQuery() === ''))
 		{
 			$result .= '?' . $this->getQuery();
 		}
 
-		if (! ($this->getFragment() === ''))
+		if (!($this->getFragment() === ''))
 		{
 			$result .= '#' . $this->getFragment();
 		}
@@ -523,7 +523,7 @@ class Uri implements UriInterface
 
 		$clone->setUsername($username);
 
-		if (! (null === $password))
+		if (!(null === $password))
 		{
 			$clone->setPassword($password);
 		}
