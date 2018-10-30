@@ -1,4 +1,4 @@
-# Simple URI parser for PHP 7.2+ based on RFC-3986
+# URI wrapper for PHP 7.2+ based on RFC-3986, PSR-7 & PSR-17
 
 [![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
 [![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
@@ -16,26 +16,26 @@
 composer require sunrise/uri
 ```
 
-## How to use
+## How to use?
 
 ```php
-try
-{
-    $uri = new \Sunrise\Uri\Uri('http://user:pass@localhost:3000/path?key=value#fragment');
-}
-catch (\Sunrise\Uri\Exception\InvalidUriException $e)
-{
-    // Invalid URI...
-}
-catch (\Sunrise\Uri\Exception\InvalidUriComponentException $e)
-{
-    // Invalid URI component...
-}
-catch (\Sunrise\Uri\Exception\Exception $e)
-{
-    // Any URI error...
-}
+use Sunrise\Uri\Uri;
+use Sunrise\Uri\UriFactory;
 
+// creates a new URI
+$uri = new Uri('http://user:pass@localhost:3000/path?key=value#fragment');
+
+// list of setters
+$uri->setScheme();
+$uri->setUsername();
+$uri->setPassword();
+$uri->setHost();
+$uri->setPort();
+$uri->setPath();
+$uri->setQuery();
+$uri->setFragment();
+
+// list of getters
 $uri->getScheme();
 $uri->getUsername();
 $uri->getPassword();
@@ -44,13 +44,33 @@ $uri->getPort();
 $uri->getPath();
 $uri->getQuery();
 $uri->getFragment();
+
+// list of builders
 $uri->getUserInfo();
 $uri->getHostPort();
 $uri->getAuthority();
 $uri->toString();
 
-// Payload Collection
+// payload collection
 $uri->getPayload()->get('key');
+
+// psr-7 setters (with cloning)
+$uri->withScheme();
+$uri->withUserInfo();
+$uri->withHost();
+$uri->withPort();
+$uri->withPath();
+$uri->withQuery();
+$uri->withFragment();
+
+// psr-17 factory
+$uri = (new UriFactory)->createUri('/');
+```
+
+## Test run
+
+```bash
+php vendor/bin/phpunit
 ```
 
 ## Api documentation
@@ -59,4 +79,6 @@ https://phpdoc.fenric.ru/
 
 ## Useful links
 
-https://tools.ietf.org/html/rfc3986
+https://tools.ietf.org/html/rfc3986<br>
+https://www.php-fig.org/psr/psr-7/<br>
+https://www.php-fig.org/psr/psr-17/

@@ -14,6 +14,7 @@ namespace Sunrise\Uri;
 /**
  * Import classes
  */
+use Psr\Http\Message\UriInterface;
 use Sunrise\Collection\Collection;
 use Sunrise\Collection\CollectionInterface;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
@@ -21,6 +22,9 @@ use Sunrise\Uri\Exception\InvalidUriException;
 
 /**
  * Uniform Resource Identifier
+ *
+ * @link https://tools.ietf.org/html/rfc3986
+ * @link https://www.php-fig.org/psr/psr-7/
  */
 class Uri implements UriInterface
 {
@@ -89,9 +93,503 @@ class Uri implements UriInterface
 	protected $fragment = '';
 
 	/**
+	 * Constructor of the class
+	 *
+	 * @param string $uri
+	 */
+	public function __construct(string $uri = '')
+	{
+		$this->payload = new Collection();
+
+		if (! ('' === $uri))
+		{
+			$this->parse($uri);
+		}
+	}
+
+	/**
+	 * Sets the URI component "scheme"
+	 *
+	 * @param string $scheme
+	 *
+	 * @return UriInterface
+	 *
+	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI scheme
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
+	 */
+	public function setScheme(string $scheme) : UriInterface
+	{
+		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
+
+		if (! \preg_match($regex, $scheme))
+		{
+			throw new InvalidUriComponentException('Invalid URI component "scheme"');
+		}
+
+		$this->scheme = \strtolower($scheme);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "username"
+	 *
+	 * @param string $username
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
+	 */
+	public function setUsername(string $username) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+
+		$username = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $username);
+
+		$this->username = $username;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "password"
+	 *
+	 * @param string $password
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
+	 */
+	public function setPassword(string $password) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+
+		$password = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $password);
+
+		$this->password = $password;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "host"
+	 *
+	 * @param string $host
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
+	 */
+	public function setHost(string $host) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+
+		$host = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $host);
+
+		$this->host = \strtolower($host);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "port"
+	 *
+	 * @param null|int $port
+	 *
+	 * @return UriInterface
+	 *
+	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI port
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.3
+	 */
+	public function setPort(?int $port) : UriInterface
+	{
+		$min = 1;
+		$max = 2 ** 16;
+
+		if (! ($port === null || ($port >= $min && $port <= $max)))
+		{
+			throw new InvalidUriComponentException('Invalid URI component "port"');
+		}
+
+		$this->port = $port;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "path"
+	 *
+	 * @param string $path
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
+	 */
+	public function setPath(string $path) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/]+)|(.?))/u';
+
+		$path = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $path);
+
+		$this->path = $path;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "query"
+	 *
+	 * @param string $query
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
+	 */
+	public function setQuery(string $query) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
+
+		$query = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $query);
+
+		$this->query = $query;
+
+		\parse_str(\rawurldecode($query), $payload);
+
+		$this->getPayload()->clear()->update($payload);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "fragment"
+	 *
+	 * @param string $fragment
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
+	 */
+	public function setFragment(string $fragment) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
+
+		$fragment = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $fragment);
+
+		$this->fragment = $fragment;
+
+		return $this;
+	}
+
+	/**
+	 * Gets the URI payload
+	 *
+	 * @return CollectionInterface
+	 */
+	public function getPayload() : CollectionInterface
+	{
+		return $this->payload;
+	}
+
+	/**
+	 * Gets the URI component "scheme"
+	 *
+	 * @return string
+	 */
+	public function getScheme() : string
+	{
+		return $this->scheme;
+	}
+
+	/**
+	 * Gets the URI component "username"
+	 *
+	 * @return string
+	 */
+	public function getUsername() : string
+	{
+		return $this->username;
+	}
+
+	/**
+	 * Gets the URI component "password"
+	 *
+	 * @return string
+	 */
+	public function getPassword() : string
+	{
+		return $this->password;
+	}
+
+	/**
+	 * Gets the URI component "host"
+	 *
+	 * @return string
+	 */
+	public function getHost() : string
+	{
+		return $this->host;
+	}
+
+	/**
+	 * Gets the URI component "port"
+	 *
+	 * @return null|int
+	 */
+	public function getPort() : ?int
+	{
+		return $this->port;
+	}
+
+	/**
+	 * Gets the URI component "path"
+	 *
+	 * @return string
+	 */
+	public function getPath() : string
+	{
+		return $this->path;
+	}
+
+	/**
+	 * Gets the URI component "query"
+	 *
+	 * @return string
+	 */
+	public function getQuery() : string
+	{
+		return $this->query;
+	}
+
+	/**
+	 * Gets the URI component "fragment"
+	 *
+	 * @return string
+	 */
+	public function getFragment() : string
+	{
+		return $this->fragment;
+	}
+
+	/**
+	 * Gets the URI user info
+	 *
+	 * @return string
+	 */
+	public function getUserInfo() : string
+	{
+		$result = '';
+
+		if (! ($this->getUsername() === ''))
+		{
+			$result .= $this->getUsername();
+
+			if (! ($this->getPassword() === ''))
+			{
+				$result .= ':' . $this->getPassword();
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Gets the URI host and port
+	 *
+	 * @return string
+	 */
+	public function getHostPort() : string
+	{
+		$result = '';
+
+		if (! ($this->getHost() === ''))
+		{
+			$result .= $this->getHost();
+
+			if (! ($this->getPort() === null))
+			{
+				$result .= ':' . $this->getPort();
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Gets the URI authority
+	 *
+	 * @return string
+	 */
+	public function getAuthority() : string
+	{
+		$result = '';
+
+		$hostport = $this->getHostPort();
+
+		if (! ($hostport === ''))
+		{
+			$userinfo = $this->getUserInfo();
+
+			if (! ($userinfo === ''))
+			{
+				$result .= $userinfo . '@';
+			}
+
+			$result .= $hostport;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Converts the URI to string
+	 *
+	 * @return string
+	 */
+	public function toString() : string
+	{
+		$result = '';
+
+		if (! ($this->getScheme() === ''))
+		{
+			$result .= $this->getScheme() . ':';
+		}
+
+		$authority = $this->getAuthority();
+
+		if (! ($authority === ''))
+		{
+			$result .= '//' . $authority;
+		}
+
+		$result .= $this->getPath();
+
+		if (! ($this->getQuery() === ''))
+		{
+			$result .= '?' . $this->getQuery();
+		}
+
+		if (! ($this->getFragment() === ''))
+		{
+			$result .= '#' . $this->getFragment();
+		}
+
+		return $result;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
-	public function __construct(string $uri)
+	public function withScheme($scheme) : UriInterface
+	{
+		return (clone $this)
+		->setScheme($scheme);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withUserInfo($username, $password = null) : UriInterface
+	{
+		if (null === $password)
+		{
+			return (clone $this)
+			->setUsername($username);
+		}
+
+		return (clone $this)
+		->setUsername($username)
+		->setPassword($password);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withHost($host) : UriInterface
+	{
+		return (clone $this)
+		->setHost($host);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withPort($port) : UriInterface
+	{
+		return (clone $this)
+		->setPort($port);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withPath($path) : UriInterface
+	{
+		return (clone $this)
+		->setPath($path);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withQuery($query) : UriInterface
+	{
+		return (clone $this)
+		->setQuery($query);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withFragment($fragment) : UriInterface
+	{
+		return (clone $this)
+		->setFragment($fragment);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function __toString()
+	{
+		return $this->toString();
+	}
+
+	/**
+	 * Parses the given URI
+	 *
+	 * @param string $uri
+	 *
+	 * @return void
+	 *
+	 * @throws Exception\InvalidUriException If the given value is not a valid URI
+	 */
+	protected function parse(string $uri) : void
 	{
 		$components = \parse_url($uri);
 
@@ -99,8 +597,6 @@ class Uri implements UriInterface
 		{
 			throw new InvalidUriException('Unable to parse URI');
 		}
-
-		$this->payload = new Collection();
 
 		if (isset($components['scheme']))
 		{
@@ -141,322 +637,5 @@ class Uri implements UriInterface
 		{
 			$this->setFragment($components['fragment']);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setScheme(string $scheme) : UriInterface
-	{
-		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
-
-		if (! \preg_match($regex, $scheme))
-		{
-			throw new InvalidUriComponentException('Invalid URI component "scheme"');
-		}
-
-		$this->scheme = \strtolower($scheme);
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setUsername(string $username) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
-
-		$username = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $username);
-
-		$this->username = $username;
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setPassword(string $password) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
-
-		$password = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $password);
-
-		$this->password = $password;
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setHost(string $host) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
-
-		$host = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $host);
-
-		$this->host = \strtolower($host);
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setPort(?int $port) : UriInterface
-	{
-		$min = 1;
-		$max = 2 ** 16;
-
-		if (! ($port === null || ($port >= $min && $port <= $max)))
-		{
-			throw new InvalidUriComponentException('Invalid URI component "port"');
-		}
-
-		$this->port = $port;
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setPath(string $path) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/]+)|(.?))/u';
-
-		$path = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $path);
-
-		$this->path = $path;
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setQuery(string $query) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
-
-		$query = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $query);
-
-		$this->query = $query;
-
-		\parse_str(\rawurldecode($query), $payload);
-
-		$this->getPayload()->clear()->update($payload);
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setFragment(string $fragment) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
-
-		$fragment = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $fragment);
-
-		$this->fragment = $fragment;
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getPayload() : CollectionInterface
-	{
-		return $this->payload;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getScheme() : string
-	{
-		return $this->scheme;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getUsername() : string
-	{
-		return $this->username;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getPassword() : string
-	{
-		return $this->password;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getHost() : string
-	{
-		return $this->host;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getPort() : ?int
-	{
-		return $this->port;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getPath() : string
-	{
-		return $this->path;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getQuery() : string
-	{
-		return $this->query;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getFragment() : string
-	{
-		return $this->fragment;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getUserInfo() : string
-	{
-		$result = '';
-
-		if (! ($this->getUsername() === ''))
-		{
-			$result .= $this->getUsername();
-
-			if (! ($this->getPassword() === ''))
-			{
-				$result .= ':' . $this->getPassword();
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getHostPort() : string
-	{
-		$result = '';
-
-		if (! ($this->getHost() === ''))
-		{
-			$result .= $this->getHost();
-
-			if (! ($this->getPort() === null))
-			{
-				$result .= ':' . $this->getPort();
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getAuthority() : string
-	{
-		$result = '';
-
-		$hostport = $this->getHostPort();
-
-		if (! ($hostport === ''))
-		{
-			$userinfo = $this->getUserInfo();
-
-			if (! ($userinfo === ''))
-			{
-				$result .= $userinfo . '@';
-			}
-
-			$result .= $hostport;
-		}
-
-		return $result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function toString() : string
-	{
-		$result = '';
-
-		if (! ($this->getScheme() === ''))
-		{
-			$result .= $this->getScheme() . ':';
-		}
-
-		$authority = $this->getAuthority();
-
-		if (! ($authority === ''))
-		{
-			$result .= '//' . $authority;
-		}
-
-		$result .= $this->getPath();
-
-		if (! ($this->getQuery() === ''))
-		{
-			$result .= '?' . $this->getQuery();
-		}
-
-		if (! ($this->getFragment() === ''))
-		{
-			$result .= '#' . $this->getFragment();
-		}
-
-		return $result;
 	}
 }

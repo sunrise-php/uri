@@ -1,7 +1,7 @@
 {
 	"name": "sunrise/uri",
 	"description": "Sunrise URI",
-	"keywords": ["fenric", "sunrise", "uri"],
+	"keywords": ["fenric", "sunrise", "uri", "rfc-3986", "psr-7", "psr-17"],
 	"homepage": "https://github.com/sunrise-php/uri",
 	"license": "MIT",
 	"authors": [{
@@ -11,6 +11,8 @@
 	}],
 	"require": {
 		"php": "^7.2",
+		"psr/http-factory": "^1.0",
+		"psr/http-message": "^1.0",
 		"sunrise/collection": "^1.0"
 	},
 	"require-dev": {

@@ -3,22 +3,36 @@
 namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\UriInterface;
 use Sunrise\Collection\CollectionInterface;
 use Sunrise\Uri\Exception\Exception;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
 use Sunrise\Uri\Uri;
-use Sunrise\Uri\UriInterface;
 
 class UriTest extends TestCase
 {
-	public const TEST_URI = 'scheme://username:password@localhost:3000/path?query#fragment';
+	public const TEST_URI = 'scheme://username:password@host:3000/path?query#fragment';
 
 	// Constructor...
 
 	public function testConstructor()
 	{
 		$uri = new Uri(self::TEST_URI);
+
+		$this->assertInstanceOf(UriInterface::class, $uri);
+	}
+
+	public function testConstructorWithoutUri()
+	{
+		$uri = new Uri();
+
+		$this->assertInstanceOf(UriInterface::class, $uri);
+	}
+
+	public function testConstructorWithEmptyUri()
+	{
+		$uri = new Uri('');
 
 		$this->assertInstanceOf(UriInterface::class, $uri);
 	}
@@ -64,7 +78,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertEquals('localhost', $uri->getHost());
+		$this->assertEquals('host', $uri->getHost());
 	}
 
 	public function testGetPort()
@@ -280,9 +294,9 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setHost('localhost:80');
+		$uri->setHost('host:80');
 
-		$this->assertEquals('localhost%3A80', $uri->getHost(), '', 0.0, 10, false, true);
+		$this->assertEquals('host%3A80', $uri->getHost(), '', 0.0, 10, false, true);
 	}
 
 	public function testSetInvalidPortWhichIsLessThanZero()
@@ -361,10 +375,10 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertEquals('localhost:3000', $uri->getHostPort());
+		$this->assertEquals('host:3000', $uri->getHostPort());
 
 		$uri->setPort(null);
-		$this->assertEquals('localhost', $uri->getHostPort());
+		$this->assertEquals('host', $uri->getHostPort());
 
 		$uri->setHost('');
 		$this->assertEquals('', $uri->getHostPort());
@@ -377,7 +391,7 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertEquals('username:password@localhost:3000', $uri->getAuthority());
+		$this->assertEquals('username:password@host:3000', $uri->getAuthority());
 	}
 
 	public function testBuildFullUri()
@@ -402,9 +416,9 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$uri->setHost('LOCALHOST');
+		$uri->setHost('HOST');
 
-		$this->assertEquals('localhost', $uri->getHost());
+		$this->assertEquals('host', $uri->getHost());
 	}
 
 	// Payload...
@@ -446,5 +460,116 @@ class UriTest extends TestCase
 		$this->expectException(Exception::class);
 
 		(new Uri(self::TEST_URI))->setScheme('scheme://');
+	}
+
+	// PSR-7
+
+	public function testWithScheme()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withScheme('new-scheme');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('scheme', $uri->getScheme());
+		$this->assertEquals('new-scheme', $copy->getScheme());
+	}
+
+	public function testWithUserInfo()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withUserInfo('new-username', 'new-password');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('username', $uri->getUsername());
+		$this->assertEquals('new-username', $copy->getUsername());
+
+		$this->assertEquals('password', $uri->getPassword());
+		$this->assertEquals('new-password', $copy->getPassword());
+	}
+
+	public function testWithUserInfoWithoutPassword()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withUserInfo('new-username');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('username', $uri->getUsername());
+		$this->assertEquals('new-username', $copy->getUsername());
+
+		$this->assertEquals('password', $uri->getPassword());
+		$this->assertEquals('password', $copy->getPassword());
+	}
+
+	public function testWithHost()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withHost('new-host');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('host', $uri->getHost());
+		$this->assertEquals('new-host', $copy->getHost());
+	}
+
+	public function testWithPort()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withPort(80);
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals(3000, $uri->getPort());
+		$this->assertEquals(80, $copy->getPort());
+	}
+
+	public function testWithPath()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withPath('/new-path');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('/path', $uri->getPath());
+		$this->assertEquals('/new-path', $copy->getPath());
+	}
+
+	public function testWithQuery()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withQuery('new-query');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('query', $uri->getQuery());
+		$this->assertEquals('new-query', $copy->getQuery());
+	}
+
+	public function testWithFragment()
+	{
+		$uri = new Uri(self::TEST_URI);
+		$copy = $uri->withFragment('new-fragment');
+
+		$this->assertInstanceOf(UriInterface::class, $copy);
+		$this->assertNotEquals($uri, $copy);
+
+		$this->assertEquals('fragment', $uri->getFragment());
+		$this->assertEquals('new-fragment', $copy->getFragment());
+	}
+
+	public function testMagicToString()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$this->assertEquals(self::TEST_URI, (string) $uri);
 	}
 }
