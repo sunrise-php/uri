@@ -15,10 +15,6 @@ namespace Sunrise\Uri;
  * Import classes
  */
 use Psr\Http\Message\UriInterface;
-use Sunrise\Collection\Collection;
-use Sunrise\Collection\CollectionInterface;
-use Sunrise\Uri\Exception\InvalidUriComponentException;
-use Sunrise\Uri\Exception\InvalidUriException;
 
 /**
  * Uniform Resource Identifier
@@ -30,63 +26,56 @@ class Uri implements UriInterface
 {
 
 	/**
-	 * Payload of the URI
-	 *
-	 * @var CollectionInterface
-	 */
-	protected $payload;
-
-	/**
-	 * Scheme of the URI
+	 * The URI component "scheme"
 	 *
 	 * @var string
 	 */
 	protected $scheme = '';
 
 	/**
-	 * Username of the URI
+	 * The URI component "user"
 	 *
 	 * @var string
 	 */
-	protected $username = '';
+	protected $user = '';
 
 	/**
-	 * Password of the URI
+	 * The URI component "pass"
 	 *
 	 * @var string
 	 */
-	protected $password = '';
+	protected $pass = '';
 
 	/**
-	 * Host of the URI
+	 * The URI component "host"
 	 *
 	 * @var string
 	 */
 	protected $host = '';
 
 	/**
-	 * Port of the URI
+	 * The URI component "port"
 	 *
 	 * @var null|int
 	 */
 	protected $port;
 
 	/**
-	 * Path of the URI
+	 * The URI component "path"
 	 *
 	 * @var string
 	 */
 	protected $path = '';
 
 	/**
-	 * Query of the URI
+	 * The URI component "query"
 	 *
 	 * @var string
 	 */
 	protected $query = '';
 
 	/**
-	 * Fragment of the URI
+	 * The URI component "fragment"
 	 *
 	 * @var string
 	 */
@@ -99,8 +88,6 @@ class Uri implements UriInterface
 	 */
 	public function __construct(string $uri = '')
 	{
-		$this->payload = new Collection();
-
 		if (! ('' === $uri))
 		{
 			$this->parse($uri);
@@ -108,212 +95,73 @@ class Uri implements UriInterface
 	}
 
 	/**
-	 * Sets the URI component "scheme"
-	 *
-	 * @param string $scheme
-	 *
-	 * @return UriInterface
-	 *
-	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI scheme
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
+	 * {@inheritDoc}
 	 */
-	public function setScheme(string $scheme) : UriInterface
+	public function withScheme($scheme) : UriInterface
 	{
-		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
+		return (clone $this)
+		->setScheme($scheme);
+	}
 
-		if (! \preg_match($regex, $scheme))
+	/**
+	 * {@inheritDoc}
+	 */
+	public function withUserInfo($user, $pass = null) : UriInterface
+	{
+		if (! (null === $pass))
 		{
-			throw new InvalidUriComponentException('Invalid URI component "scheme"');
+			return (clone $this)
+			->setUser($user)
+			->setPass($pass);
 		}
 
-		$this->scheme = \strtolower($scheme);
-
-		return $this;
+		return (clone $this)
+		->setUser($user);
 	}
 
 	/**
-	 * Sets the URI component "username"
-	 *
-	 * @param string $username
-	 *
-	 * @return UriInterface
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
+	 * {@inheritDoc}
 	 */
-	public function setUsername(string $username) : UriInterface
+	public function withHost($host) : UriInterface
 	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
-
-		$username = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $username);
-
-		$this->username = $username;
-
-		return $this;
+		return (clone $this)
+		->setHost($host);
 	}
 
 	/**
-	 * Sets the URI component "password"
-	 *
-	 * @param string $password
-	 *
-	 * @return UriInterface
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
+	 * {@inheritDoc}
 	 */
-	public function setPassword(string $password) : UriInterface
+	public function withPort($port) : UriInterface
 	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
-
-		$password = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $password);
-
-		$this->password = $password;
-
-		return $this;
+		return (clone $this)
+		->setPort($port);
 	}
 
 	/**
-	 * Sets the URI component "host"
-	 *
-	 * @param string $host
-	 *
-	 * @return UriInterface
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
+	 * {@inheritDoc}
 	 */
-	public function setHost(string $host) : UriInterface
+	public function withPath($path) : UriInterface
 	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
-
-		$host = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $host);
-
-		$this->host = \strtolower($host);
-
-		return $this;
+		return (clone $this)
+		->setPath($path);
 	}
 
 	/**
-	 * Sets the URI component "port"
-	 *
-	 * @param null|int $port
-	 *
-	 * @return UriInterface
-	 *
-	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI port
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.3
+	 * {@inheritDoc}
 	 */
-	public function setPort(?int $port) : UriInterface
+	public function withQuery($query) : UriInterface
 	{
-		$min = 1;
-		$max = 2 ** 16;
-
-		if (! ($port === null || ($port >= $min && $port <= $max)))
-		{
-			throw new InvalidUriComponentException('Invalid URI component "port"');
-		}
-
-		$this->port = $port;
-
-		return $this;
+		return (clone $this)
+		->setQuery($query);
 	}
 
 	/**
-	 * Sets the URI component "path"
-	 *
-	 * @param string $path
-	 *
-	 * @return UriInterface
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
+	 * {@inheritDoc}
 	 */
-	public function setPath(string $path) : UriInterface
+	public function withFragment($fragment) : UriInterface
 	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/]+)|(.?))/u';
-
-		$path = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $path);
-
-		$this->path = $path;
-
-		return $this;
-	}
-
-	/**
-	 * Sets the URI component "query"
-	 *
-	 * @param string $query
-	 *
-	 * @return UriInterface
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
-	 */
-	public function setQuery(string $query) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
-
-		$query = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $query);
-
-		$this->query = $query;
-
-		\parse_str(\rawurldecode($query), $payload);
-
-		$this->getPayload()->clear()->update($payload);
-
-		return $this;
-	}
-
-	/**
-	 * Sets the URI component "fragment"
-	 *
-	 * @param string $fragment
-	 *
-	 * @return UriInterface
-	 *
-	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
-	 */
-	public function setFragment(string $fragment) : UriInterface
-	{
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
-
-		$fragment = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
-
-		}, $fragment);
-
-		$this->fragment = $fragment;
-
-		return $this;
-	}
-
-	/**
-	 * Gets the URI payload
-	 *
-	 * @return CollectionInterface
-	 */
-	public function getPayload() : CollectionInterface
-	{
-		return $this->payload;
+		return (clone $this)
+		->setFragment($fragment);
 	}
 
 	/**
@@ -327,23 +175,23 @@ class Uri implements UriInterface
 	}
 
 	/**
-	 * Gets the URI component "username"
+	 * Gets the URI component "user"
 	 *
 	 * @return string
 	 */
-	public function getUsername() : string
+	public function getUser() : string
 	{
-		return $this->username;
+		return $this->user;
 	}
 
 	/**
-	 * Gets the URI component "password"
+	 * Gets the URI component "pass"
 	 *
 	 * @return string
 	 */
-	public function getPassword() : string
+	public function getPass() : string
 	{
-		return $this->password;
+		return $this->pass;
 	}
 
 	/**
@@ -405,13 +253,13 @@ class Uri implements UriInterface
 	{
 		$result = '';
 
-		if (! ($this->getUsername() === ''))
+		if (! ($this->getUser() === ''))
 		{
-			$result .= $this->getUsername();
+			$result .= $this->getUser();
 
-			if (! ($this->getPassword() === ''))
+			if (! ($this->getPass() === ''))
 			{
-				$result .= ':' . $this->getPassword();
+				$result .= ':' . $this->getPass();
 			}
 		}
 
@@ -503,100 +351,210 @@ class Uri implements UriInterface
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function withScheme($scheme) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setScheme($scheme);
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function withUserInfo($username, $password = null) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setUsername($username);
-
-		if (! (null === $password))
-		{
-			$clone->setPassword($password);
-		}
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function withHost($host) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setHost($host);
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function withPort($port) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setPort($port);
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function withPath($path) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setPath($path);
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function withQuery($query) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setQuery($query);
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function withFragment($fragment) : UriInterface
-	{
-		$clone = clone $this;
-
-		$clone->setFragment($fragment);
-
-		return $clone;
-	}
-
-	/**
-	 * {@inheritDoc}
+	 * Converts the object to string
+	 *
+	 * @return string
+	 *
+	 * @link http://php.net/manual/en/language.oop5.magic.php#object.tostring
 	 */
 	public function __toString()
 	{
 		return $this->toString();
+	}
+
+	/**
+	 * Sets the URI component "scheme"
+	 *
+	 * @param string $scheme
+	 *
+	 * @return UriInterface
+	 *
+	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI scheme
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
+	 */
+	protected function setScheme(string $scheme) : UriInterface
+	{
+		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
+
+		if (! \preg_match($regex, $scheme))
+		{
+			throw new Exception\InvalidUriComponentException('Invalid URI component "scheme"');
+		}
+
+		$this->scheme = \strtolower($scheme);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "user"
+	 *
+	 * @param string $user
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
+	 */
+	protected function setUser(string $user) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+
+		$user = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $user);
+
+		$this->user = $user;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "pass"
+	 *
+	 * @param string $pass
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
+	 */
+	protected function setPass(string $pass) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+
+		$pass = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $pass);
+
+		$this->pass = $pass;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "host"
+	 *
+	 * @param string $host
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
+	 */
+	protected function setHost(string $host) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+
+		$host = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $host);
+
+		$this->host = \strtolower($host);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "port"
+	 *
+	 * @param null|int $port
+	 *
+	 * @return UriInterface
+	 *
+	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI port
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.3
+	 */
+	protected function setPort(?int $port) : UriInterface
+	{
+		$min = 1;
+		$max = 2 ** 16;
+
+		if (! ($port === null || ($port >= $min && $port <= $max)))
+		{
+			throw new Exception\InvalidUriComponentException('Invalid URI component "port"');
+		}
+
+		$this->port = $port;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "path"
+	 *
+	 * @param string $path
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
+	 */
+	protected function setPath(string $path) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/]+)|(.?))/u';
+
+		$path = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $path);
+
+		$this->path = $path;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "query"
+	 *
+	 * @param string $query
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
+	 */
+	protected function setQuery(string $query) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
+
+		$query = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $query);
+
+		$this->query = $query;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the URI component "fragment"
+	 *
+	 * @param string $fragment
+	 *
+	 * @return UriInterface
+	 *
+	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
+	 */
+	protected function setFragment(string $fragment) : UriInterface
+	{
+		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
+
+		$fragment = \preg_replace_callback($regex, function($match)
+		{
+			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+
+		}, $fragment);
+
+		$this->fragment = $fragment;
+
+		return $this;
 	}
 
 	/**
@@ -607,6 +565,8 @@ class Uri implements UriInterface
 	 * @return void
 	 *
 	 * @throws Exception\InvalidUriException If the given value is not a valid URI
+	 *
+	 * @link http://php.net/manual/en/function.parse-url.php
 	 */
 	protected function parse(string $uri) : void
 	{
@@ -614,7 +574,7 @@ class Uri implements UriInterface
 
 		if ($components === false)
 		{
-			throw new InvalidUriException('Unable to parse URI');
+			throw new Exception\InvalidUriException('Unable to parse URI');
 		}
 
 		if (isset($components['scheme']))
@@ -624,12 +584,12 @@ class Uri implements UriInterface
 
 		if (isset($components['user']))
 		{
-			$this->setUsername($components['user']);
+			$this->setUser($components['user']);
 		}
 
 		if (isset($components['pass']))
 		{
-			$this->setPassword($components['pass']);
+			$this->setPass($components['pass']);
 		}
 
 		if (isset($components['host']))

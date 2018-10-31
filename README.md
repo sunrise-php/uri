@@ -22,23 +22,25 @@ composer require sunrise/uri
 use Sunrise\Uri\Uri;
 use Sunrise\Uri\UriFactory;
 
-// creates a new URI
-$uri = new Uri('http://user:pass@localhost:3000/path?key=value#fragment');
+// creates a new URI with a factory
+$uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
 
-// list of setters
-$uri->setScheme();
-$uri->setUsername();
-$uri->setPassword();
-$uri->setHost();
-$uri->setPort();
-$uri->setPath();
-$uri->setQuery();
-$uri->setFragment();
+// creates a new URI without a factory
+$uri = new Uri('http://user:pass@localhost:3000/path?query#fragment');
+
+// list of withers
+$uri->withScheme();
+$uri->withUserInfo();
+$uri->withHost();
+$uri->withPort();
+$uri->withPath();
+$uri->withQuery();
+$uri->withFragment();
 
 // list of getters
 $uri->getScheme();
-$uri->getUsername();
-$uri->getPassword();
+$uri->getUser();
+$uri->getPass();
 $uri->getHost();
 $uri->getPort();
 $uri->getPath();
@@ -51,20 +53,8 @@ $uri->getHostPort();
 $uri->getAuthority();
 $uri->toString();
 
-// payload collection
-$uri->getPayload()->get('key');
-
-// psr-7 setters (with cloning)
-$uri->withScheme();
-$uri->withUserInfo();
-$uri->withHost();
-$uri->withPort();
-$uri->withPath();
-$uri->withQuery();
-$uri->withFragment();
-
-// psr-17 factory
-$uri = (new UriFactory)->createUri('/');
+// magic conversion to a string
+(string) $uri;
 ```
 
 ## Test run
