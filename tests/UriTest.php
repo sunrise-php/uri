@@ -4,7 +4,6 @@ namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriInterface;
-use Sunrise\Collection\CollectionInterface;
 use Sunrise\Uri\Exception\Exception;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
@@ -12,7 +11,7 @@ use Sunrise\Uri\Uri;
 
 class UriTest extends TestCase
 {
-	public const TEST_URI = 'scheme://username:password@host:3000/path?query#fragment';
+	public const TEST_URI = 'scheme://user:pass@host:3000/path?query#fragment';
 
 	// Constructor...
 
@@ -46,13 +45,6 @@ class UriTest extends TestCase
 
 	// Getters...
 
-	public function testGetPayload()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(CollectionInterface::class, $uri->getPayload());
-	}
-
 	public function testGetScheme()
 	{
 		$uri = new Uri(self::TEST_URI);
@@ -60,18 +52,18 @@ class UriTest extends TestCase
 		$this->assertEquals('scheme', $uri->getScheme());
 	}
 
-	public function testGetUsername()
+	public function testGetUser()
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertEquals('username', $uri->getUsername());
+		$this->assertEquals('user', $uri->getUser());
 	}
 
-	public function testGetPassword()
+	public function testGetPass()
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertEquals('password', $uri->getPassword());
+		$this->assertEquals('pass', $uri->getPass());
 	}
 
 	public function testGetHost()
@@ -109,360 +101,7 @@ class UriTest extends TestCase
 		$this->assertEquals('fragment', $uri->getFragment());
 	}
 
-	// Setters...
-
-	public function testSetScheme()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setScheme('new-scheme'));
-
-		$this->assertEquals('new-scheme', $uri->getScheme());
-	}
-
-	public function testSetUsername()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setUsername('new-username'));
-
-		$this->assertEquals('new-username', $uri->getUsername());
-	}
-
-	public function testSetPassword()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setPassword('new-password'));
-
-		$this->assertEquals('new-password', $uri->getPassword());
-	}
-
-	public function testSetHost()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setHost('new-host'));
-
-		$this->assertEquals('new-host', $uri->getHost());
-	}
-
-	public function testSetPort()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setPort(80));
-
-		$this->assertEquals(80, $uri->getPort());
-	}
-
-	public function testSetPath()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setPath('/new-path'));
-
-		$this->assertEquals('/new-path', $uri->getPath());
-	}
-
-	public function testSetQuery()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setQuery('new-query'));
-
-		$this->assertEquals('new-query', $uri->getQuery());
-
-		$this->assertEquals(['new-query' => ''], $uri->getPayload()->toArray());
-	}
-
-	public function testSetFragment()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertInstanceOf(UriInterface::class, $uri->setFragment('new-fragment'));
-
-		$this->assertEquals('new-fragment', $uri->getFragment());
-	}
-
-	// Setters with empty data...
-
-	public function testSetEmptyScheme()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setScheme('');
-
-		$this->assertEquals('', $uri->getScheme());
-	}
-
-	public function testSetEmptyUsername()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setUsername('');
-
-		$this->assertEquals('', $uri->getUsername());
-	}
-
-	public function testSetEmptyPassword()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPassword('');
-
-		$this->assertEquals('', $uri->getPassword());
-	}
-
-	public function testSetEmptyHost()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setHost('');
-
-		$this->assertEquals('', $uri->getHost());
-	}
-
-	public function testSetEmptyPort()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPort(null);
-
-		$this->assertEquals(null, $uri->getPort());
-	}
-
-	public function testSetEmptyPath()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPath('');
-
-		$this->assertEquals('', $uri->getPath());
-	}
-
-	public function testSetEmptyQuery()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setQuery('');
-
-		$this->assertEquals('', $uri->getQuery());
-
-		$this->assertEquals([], $uri->getPayload()->toArray());
-	}
-
-	public function testSetEmptyFragment()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setFragment('');
-
-		$this->assertEquals('', $uri->getFragment());
-	}
-
-	// Setters with invalid data...
-
-	public function testSetInvalidScheme()
-	{
-		$this->expectException(InvalidUriComponentException::class);
-
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setScheme('scheme://');
-	}
-
-	public function testSetInvalidUsername()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setUsername('username:password');
-
-		$this->assertEquals('username%3Apassword', $uri->getUsername(), '', 0.0, 10, false, true);
-	}
-
-	public function testSetInvalidPassword()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPassword('username:password');
-
-		$this->assertEquals('username%3Apassword', $uri->getPassword(), '', 0.0, 10, false, true);
-	}
-
-	public function testSetInvalidHost()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setHost('host:80');
-
-		$this->assertEquals('host%3A80', $uri->getHost(), '', 0.0, 10, false, true);
-	}
-
-	public function testSetInvalidPortWhichIsLessThanZero()
-	{
-		$this->expectException(InvalidUriComponentException::class);
-
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPort(-1);
-	}
-
-	public function testSetInvalidPortWhichIsZero()
-	{
-		$this->expectException(InvalidUriComponentException::class);
-
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPort(0);
-	}
-
-	public function testSetInvalidPortWhichIsTooLarge()
-	{
-		$this->expectException(InvalidUriComponentException::class);
-
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPort((2 ** 16) + 1);
-	}
-
-	public function testSetInvalidPath()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setPath('/path?query');
-
-		$this->assertEquals('/path%3Fquery', $uri->getPath(), '', 0.0, 10, false, true);
-	}
-
-	public function testSetInvalidQuery()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setQuery('query#fragment');
-
-		$this->assertEquals('query%23fragment', $uri->getQuery(), '', 0.0, 10, false, true);
-	}
-
-	public function testSetInvalidFragment()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setFragment('fragment#another-fragment');
-
-		$this->assertEquals('fragment%23another-fragment', $uri->getFragment(), '', 0.0, 10, false, true);
-	}
-
-	// Builds...
-
-	public function testBuildUserInfo()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertEquals('username:password', $uri->getUserInfo());
-
-		$uri->setPassword('');
-		$this->assertEquals('username', $uri->getUserInfo());
-
-		$uri->setUsername('');
-		$this->assertEquals('', $uri->getUserInfo());
-
-		$uri->setPassword('password');
-		$this->assertEquals('', $uri->getUserInfo());
-	}
-
-	public function testBuildHostPort()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertEquals('host:3000', $uri->getHostPort());
-
-		$uri->setPort(null);
-		$this->assertEquals('host', $uri->getHostPort());
-
-		$uri->setHost('');
-		$this->assertEquals('', $uri->getHostPort());
-
-		$uri->setPort(3000);
-		$this->assertEquals('', $uri->getHostPort());
-	}
-
-	public function testBuildAuthority()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertEquals('username:password@host:3000', $uri->getAuthority());
-	}
-
-	public function testBuildFullUri()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$this->assertEquals(self::TEST_URI, $uri->toString());
-	}
-
-	// Normalizes...
-
-	public function testNormalizeSchemeToLowerCase()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setScheme('SCHEME');
-
-		$this->assertEquals('scheme', $uri->getScheme());
-	}
-
-	public function testNormalizeHostToLowerCase()
-	{
-		$uri = new Uri(self::TEST_URI);
-
-		$uri->setHost('HOST');
-
-		$this->assertEquals('host', $uri->getHost());
-	}
-
-	// Payload...
-
-	public function testPayload()
-	{
-		$uri = new Uri('/?string=value&array%5B%5D=1&array%5B%5D=2&array%5B%5D=3');
-
-		$this->assertEquals(['string' => 'value', 'array' => [1, 2, 3]], $uri->getPayload()->toArray());
-	}
-
-	public function testUpdatePayload()
-	{
-		$uri = new Uri('/?string=value');
-
-		$uri->setQuery('new-string=new-value');
-
-		$this->assertEquals(['new-string' => 'new-value'], $uri->getPayload()->toArray());
-	}
-
-	// Exceptions...
-
-	public function testException()
-	{
-		$this->expectException(\RuntimeException::class);
-
-		new Uri(':');
-	}
-
-	public function testInvalidUriException()
-	{
-		$this->expectException(Exception::class);
-
-		new Uri(':');
-	}
-
-	public function testInvalidUriComponentException()
-	{
-		$this->expectException(Exception::class);
-
-		(new Uri(self::TEST_URI))->setScheme('scheme://');
-	}
-
-	// PSR-7
+	// Withers...
 
 	public function testWithScheme()
 	{
@@ -479,31 +118,31 @@ class UriTest extends TestCase
 	public function testWithUserInfo()
 	{
 		$uri = new Uri(self::TEST_URI);
-		$copy = $uri->withUserInfo('new-username', 'new-password');
+		$copy = $uri->withUserInfo('new-user', 'new-pass');
 
 		$this->assertInstanceOf(UriInterface::class, $copy);
 		$this->assertNotEquals($uri, $copy);
 
-		$this->assertEquals('username', $uri->getUsername());
-		$this->assertEquals('new-username', $copy->getUsername());
+		$this->assertEquals('user', $uri->getUser());
+		$this->assertEquals('new-user', $copy->getUser());
 
-		$this->assertEquals('password', $uri->getPassword());
-		$this->assertEquals('new-password', $copy->getPassword());
+		$this->assertEquals('pass', $uri->getPass());
+		$this->assertEquals('new-pass', $copy->getPass());
 	}
 
-	public function testWithUserInfoWithoutPassword()
+	public function testWithUserInfoWithoutPass()
 	{
 		$uri = new Uri(self::TEST_URI);
-		$copy = $uri->withUserInfo('new-username');
+		$copy = $uri->withUserInfo('new-user');
 
 		$this->assertInstanceOf(UriInterface::class, $copy);
 		$this->assertNotEquals($uri, $copy);
 
-		$this->assertEquals('username', $uri->getUsername());
-		$this->assertEquals('new-username', $copy->getUsername());
+		$this->assertEquals('user', $uri->getUser());
+		$this->assertEquals('new-user', $copy->getUser());
 
-		$this->assertEquals('password', $uri->getPassword());
-		$this->assertEquals('password', $copy->getPassword());
+		$this->assertEquals('pass', $uri->getPass());
+		$this->assertEquals('pass', $copy->getPass());
 	}
 
 	public function testWithHost()
@@ -566,10 +205,225 @@ class UriTest extends TestCase
 		$this->assertEquals('new-fragment', $copy->getFragment());
 	}
 
+	// Withers with empty data...
+
+	public function testWithEmptyScheme()
+	{
+		$uri = (new Uri(self::TEST_URI))->withScheme('');
+
+		$this->assertEquals('', $uri->getScheme());
+	}
+
+	public function testWithEmptyUser()
+	{
+		$uri = (new Uri(self::TEST_URI))->withUserInfo('');
+
+		$this->assertEquals('', $uri->getUser());
+	}
+
+	public function testWithEmptyPass()
+	{
+		$uri = (new Uri(self::TEST_URI))->withUserInfo('', '');
+
+		$this->assertEquals('', $uri->getPass());
+	}
+
+	public function testWithEmptyHost()
+	{
+		$uri = (new Uri(self::TEST_URI))->withHost('');
+
+		$this->assertEquals('', $uri->getHost());
+	}
+
+	public function testWithEmptyPort()
+	{
+		$uri = (new Uri(self::TEST_URI))->withPort(null);
+
+		$this->assertEquals(null, $uri->getPort());
+	}
+
+	public function testWithEmptyPath()
+	{
+		$uri = (new Uri(self::TEST_URI))->withPath('');
+
+		$this->assertEquals('', $uri->getPath());
+	}
+
+	public function testWithEmptyQuery()
+	{
+		$uri = (new Uri(self::TEST_URI))->withQuery('');
+
+		$this->assertEquals('', $uri->getQuery());
+	}
+
+	public function testWithEmptyFragment()
+	{
+		$uri = (new Uri(self::TEST_URI))->withFragment('');
+
+		$this->assertEquals('', $uri->getFragment());
+	}
+
+	// Withers with invalid data...
+
+	public function testWithInvalidScheme()
+	{
+		$this->expectException(InvalidUriComponentException::class);
+
+		(new Uri(self::TEST_URI))->withScheme('scheme://');
+	}
+
+	public function testWithInvalidUser()
+	{
+		$uri = (new Uri(self::TEST_URI))->withUserInfo('user:pass');
+
+		$this->assertEquals('user%3Apass', $uri->getUser(), '', 0.0, 10, false, true);
+	}
+
+	public function testWithInvalidPass()
+	{
+		$uri = (new Uri(self::TEST_URI))->withUserInfo('user', 'user:pass');
+
+		$this->assertEquals('user%3Apass', $uri->getPass(), '', 0.0, 10, false, true);
+	}
+
+	public function testWithInvalidHost()
+	{
+		$uri = (new Uri(self::TEST_URI))->withHost('host:80');
+
+		$this->assertEquals('host%3A80', $uri->getHost(), '', 0.0, 10, false, true);
+	}
+
+	public function testWithInvalidPortWhichIsLessThanZero()
+	{
+		$this->expectException(InvalidUriComponentException::class);
+
+		(new Uri(self::TEST_URI))->withPort(-1);
+	}
+
+	public function testWithInvalidPortWhichIsZero()
+	{
+		$this->expectException(InvalidUriComponentException::class);
+
+		(new Uri(self::TEST_URI))->withPort(0);
+	}
+
+	public function testWithInvalidPortWhichIsTooLarge()
+	{
+		$this->expectException(InvalidUriComponentException::class);
+
+		(new Uri(self::TEST_URI))->withPort((2 ** 16) + 1);
+	}
+
+	public function testWithInvalidPath()
+	{
+		$uri = (new Uri(self::TEST_URI))->withPath('/path?query');
+
+		$this->assertEquals('/path%3Fquery', $uri->getPath(), '', 0.0, 10, false, true);
+	}
+
+	public function testWithInvalidQuery()
+	{
+		$uri = (new Uri(self::TEST_URI))->withQuery('query#fragment');
+
+		$this->assertEquals('query%23fragment', $uri->getQuery(), '', 0.0, 10, false, true);
+	}
+
+	public function testWithInvalidFragment()
+	{
+		$uri = (new Uri(self::TEST_URI))->withFragment('fragment#another-fragment');
+
+		$this->assertEquals('fragment%23another-fragment', $uri->getFragment(), '', 0.0, 10, false, true);
+	}
+
+	// Builders...
+
+	public function testGetUserInfo()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$this->assertEquals('user:pass', $uri->getUserInfo());
+
+		$uri = $uri->withUserInfo('user', '');
+		$this->assertEquals('user', $uri->getUserInfo());
+
+		$uri = $uri->withUserInfo('');
+		$this->assertEquals('', $uri->getUserInfo());
+
+		$uri = $uri->withUserInfo('', 'pass');
+		$this->assertEquals('', $uri->getUserInfo());
+	}
+
+	public function testGetHostPort()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$this->assertEquals('host:3000', $uri->getHostPort());
+
+		$uri = $uri->withPort(null);
+		$this->assertEquals('host', $uri->getHostPort());
+
+		$uri = $uri->withHost('');
+		$this->assertEquals('', $uri->getHostPort());
+
+		$uri = $uri->withPort(3000);
+		$this->assertEquals('', $uri->getHostPort());
+	}
+
+	public function testGetAuthority()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$this->assertEquals('user:pass@host:3000', $uri->getAuthority());
+
+		$this->assertEquals('host:3000', $uri->withUserInfo('')->getAuthority());
+
+		$this->assertEquals('user@host:3000', $uri->withUserInfo('user', '')->getAuthority());
+
+		$this->assertEquals('', $uri->withHost('')->getAuthority());
+
+		$this->assertEquals('user:pass@host', $uri->withPort(null)->getAuthority());
+	}
+
+	public function testToString()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$this->assertEquals(self::TEST_URI, $uri->toString());
+	}
+
 	public function testMagicToString()
 	{
 		$uri = new Uri(self::TEST_URI);
 
 		$this->assertEquals(self::TEST_URI, (string) $uri);
+	}
+
+	// Normalizes...
+
+	public function testNormalizeSchemeToLowerCase()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$uri = $uri->withScheme('UPPERCASED-SCHEME');
+
+		$this->assertEquals('uppercased-scheme', $uri->getScheme());
+	}
+
+	public function testNormalizeHostToLowerCase()
+	{
+		$uri = new Uri(self::TEST_URI);
+
+		$uri = $uri->withHost('UPPERCASED-HOST');
+
+		$this->assertEquals('uppercased-host', $uri->getHost());
+	}
+
+	// Exceptions...
+
+	public function testExceptions()
+	{
+		$this->assertInstanceOf(\RuntimeException::class, new Exception(''));
+		$this->assertInstanceOf(Exception::class, new InvalidUriComponentException(''));
+		$this->assertInstanceOf(Exception::class, new InvalidUriException(''));
 	}
 }
