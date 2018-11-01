@@ -30,9 +30,9 @@ $uri = (new UriFactory)->createUriFromServer($_SERVER);
 
 // create a new URI from the given mock with a factory
 $uri = (new UriFactory)->createUriFromServer([
-	'HTTPS' => 'on',
-	'HTTP_HOST' => 'localhost:3000',
-	'REQUEST_URI' => '/path?query',
+    'HTTPS' => 'on',
+    'HTTP_HOST' => 'localhost:3000',
+    'REQUEST_URI' => '/path?query',
 ]);
 
 // creates a new URI without a factory
