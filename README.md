@@ -25,6 +25,16 @@ use Sunrise\Uri\UriFactory;
 // creates a new URI with a factory
 $uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
 
+// create a new URI from the server environment with a factory
+$uri = (new UriFactory)->createUriFromServer($_SERVER);
+
+// create a new URI from the given mock with a factory
+$uri = (new UriFactory)->createUriFromServer([
+	'HTTPS' => 'on',
+	'HTTP_HOST' => 'localhost:3000',
+	'REQUEST_URI' => '/path?query',
+]);
+
 // creates a new URI without a factory
 $uri = new Uri('http://user:pass@localhost:3000/path?query#fragment');
 

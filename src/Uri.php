@@ -281,7 +281,14 @@ class Uri implements UriInterface
 
 			if (! ($this->getPort() === null))
 			{
-				$result .= ':' . $this->getPort();
+				// Ignoring the standard port for http/https scheme
+				if (! ($this->getPort() === 80 && $this->getScheme() === 'http'))
+				{
+					if (! ($this->getPort() === 443 && $this->getScheme() === 'https'))
+					{
+						$result .= ':' . $this->getPort();
+					}
+				}
 			}
 		}
 

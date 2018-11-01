@@ -426,4 +426,21 @@ class UriTest extends TestCase
 		$this->assertInstanceOf(Exception::class, new InvalidUriComponentException(''));
 		$this->assertInstanceOf(Exception::class, new InvalidUriException(''));
 	}
+
+	// Ignoring the standard ports
+
+	public function testIgnoringStandardPorts()
+	{
+		$uri = new Uri('http://example.com:80/');
+		$this->assertEquals('http://example.com/', $uri->toString());
+
+		$uri = new Uri('https://example.com:443/');
+		$this->assertEquals('https://example.com/', $uri->toString());
+
+		$uri = new Uri('http://example.com:443/');
+		$this->assertEquals('http://example.com:443/', $uri->toString());
+
+		$uri = new Uri('https://example.com:80/');
+		$this->assertEquals('https://example.com:80/', $uri->toString());
+	}
 }
