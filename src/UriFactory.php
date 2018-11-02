@@ -36,47 +36,47 @@ class UriFactory implements UriFactoryInterface
 	/**
 	 * Creates URI from the server environment
 	 *
-	 * @param array $server
+	 * @param array $SERVER
 	 *
 	 * @return UriInterface
 	 *
 	 * @link http://php.net/manual/en/reserved.variables.server.php
 	 */
-	public function createUriFromServer(array $server) : UriInterface
+	public function createUriFromServer(array $SERVER) : UriInterface
 	{
-		if (\array_key_exists('HTTPS', $server))
+		if (\array_key_exists('HTTPS', $SERVER))
 		{
-			if (! ('off' === $server['HTTPS']))
+			if (! ('off' === $SERVER['HTTPS']))
 			{
 				$scheme = 'https://';
 			}
 		}
 
-		if (\array_key_exists('HTTP_HOST', $server))
+		if (\array_key_exists('HTTP_HOST', $SERVER))
 		{
-			$domain = $server['HTTP_HOST'];
+			$domain = $SERVER['HTTP_HOST'];
 		}
-		else if (\array_key_exists('SERVER_NAME', $server))
+		else if (\array_key_exists('SERVER_NAME', $SERVER))
 		{
-			$domain = $server['SERVER_NAME'];
+			$domain = $SERVER['SERVER_NAME'];
 
-			if (\array_key_exists('SERVER_PORT', $server))
+			if (\array_key_exists('SERVER_PORT', $SERVER))
 			{
-				$domain .= ':' . $server['SERVER_PORT'];
+				$domain .= ':' . $SERVER['SERVER_PORT'];
 			}
 		}
 
-		if (\array_key_exists('REQUEST_URI', $server))
+		if (\array_key_exists('REQUEST_URI', $SERVER))
 		{
-			$target = $server['REQUEST_URI'];
+			$target = $SERVER['REQUEST_URI'];
 		}
-		else if (\array_key_exists('PHP_SELF', $server))
+		else if (\array_key_exists('PHP_SELF', $SERVER))
 		{
-			$target = $server['PHP_SELF'];
+			$target = $SERVER['PHP_SELF'];
 
-			if (\array_key_exists('QUERY_STRING', $server))
+			if (\array_key_exists('QUERY_STRING', $SERVER))
 			{
-				$target .= '?' . $server['QUERY_STRING'];
+				$target .= '?' . $SERVER['QUERY_STRING'];
 			}
 		}
 

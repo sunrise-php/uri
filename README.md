@@ -61,7 +61,6 @@ $uri->getFragment();
 $uri->getUserInfo();
 $uri->getHostPort();
 $uri->getAuthority();
-$uri->toString();
 
 // magic conversion to a string
 (string) $uri;
