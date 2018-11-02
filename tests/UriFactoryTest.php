@@ -46,42 +46,42 @@ class UriFactoryTest extends TestCase
 	public function testCreateUriFromServer()
 	{
 		$uri = (new UriFactory)->createUriFromServer([]);
-		$this->assertEquals('http://localhost/', $uri->toString());
+		$this->assertEquals('http://localhost/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['HTTPS' => 'off']);
-		$this->assertEquals('http://localhost/', $uri->toString());
+		$this->assertEquals('http://localhost/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['HTTPS' => 'on']);
-		$this->assertEquals('https://localhost/', $uri->toString());
+		$this->assertEquals('https://localhost/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['HTTP_HOST' => 'example.com']);
-		$this->assertEquals('http://example.com/', $uri->toString());
+		$this->assertEquals('http://example.com/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['HTTP_HOST' => 'example.com:3000']);
-		$this->assertEquals('http://example.com:3000/', $uri->toString());
+		$this->assertEquals('http://example.com:3000/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['SERVER_NAME' => 'example.com']);
-		$this->assertEquals('http://example.com/', $uri->toString());
+		$this->assertEquals('http://example.com/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['SERVER_NAME' => 'example.com', 'SERVER_PORT' => 3000]);
-		$this->assertEquals('http://example.com:3000/', $uri->toString());
+		$this->assertEquals('http://example.com:3000/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['SERVER_PORT' => 3000]);
-		$this->assertEquals('http://localhost/', $uri->toString());
+		$this->assertEquals('http://localhost/', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['REQUEST_URI' => '/path']);
-		$this->assertEquals('http://localhost/path', $uri->toString());
+		$this->assertEquals('http://localhost/path', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['REQUEST_URI' => '/path?query']);
-		$this->assertEquals('http://localhost/path?query', $uri->toString());
+		$this->assertEquals('http://localhost/path?query', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['PHP_SELF' => '/path']);
-		$this->assertEquals('http://localhost/path', $uri->toString());
+		$this->assertEquals('http://localhost/path', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['PHP_SELF' => '/path', 'QUERY_STRING' => 'query']);
-		$this->assertEquals('http://localhost/path?query', $uri->toString());
+		$this->assertEquals('http://localhost/path?query', (string) $uri);
 
 		$uri = (new UriFactory)->createUriFromServer(['QUERY_STRING' => 'query']);
-		$this->assertEquals('http://localhost/', $uri->toString());
+		$this->assertEquals('http://localhost/', (string) $uri);
 	}
 }

@@ -12,7 +12,12 @@
 namespace Sunrise\Uri\Exception;
 
 /**
+ * Import classes
+ */
+use InvalidArgumentException;
+
+/**
  * InvalidUriException
  */
-class InvalidUriException extends Exception
+class InvalidUriException extends InvalidArgumentException
 {}

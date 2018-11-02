@@ -325,8 +325,10 @@ class Uri implements UriInterface
 	 * Converts the URI to string
 	 *
 	 * @return string
+	 *
+	 * @link http://php.net/manual/en/language.oop5.magic.php#object.tostring
 	 */
-	public function toString() : string
+	public function __toString()
 	{
 		$result = '';
 
@@ -355,18 +357,6 @@ class Uri implements UriInterface
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Converts the object to string
-	 *
-	 * @return string
-	 *
-	 * @link http://php.net/manual/en/language.oop5.magic.php#object.tostring
-	 */
-	public function __toString()
-	{
-		return $this->toString();
 	}
 
 	/**

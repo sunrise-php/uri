@@ -4,7 +4,6 @@ namespace Sunrise\Uri\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\UriInterface;
-use Sunrise\Uri\Exception\Exception;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 use Sunrise\Uri\Exception\InvalidUriException;
 use Sunrise\Uri\Uri;
@@ -388,13 +387,6 @@ class UriTest extends TestCase
 	{
 		$uri = new Uri(self::TEST_URI);
 
-		$this->assertEquals(self::TEST_URI, $uri->toString());
-	}
-
-	public function testMagicToString()
-	{
-		$uri = new Uri(self::TEST_URI);
-
 		$this->assertEquals(self::TEST_URI, (string) $uri);
 	}
 
@@ -422,9 +414,8 @@ class UriTest extends TestCase
 
 	public function testExceptions()
 	{
-		$this->assertInstanceOf(\RuntimeException::class, new Exception(''));
-		$this->assertInstanceOf(Exception::class, new InvalidUriComponentException(''));
-		$this->assertInstanceOf(Exception::class, new InvalidUriException(''));
+		$this->assertInstanceOf(\InvalidArgumentException::class, new InvalidUriComponentException(''));
+		$this->assertInstanceOf(\InvalidArgumentException::class, new InvalidUriException(''));
 	}
 
 	// Ignoring the standard ports
@@ -432,15 +423,15 @@ class UriTest extends TestCase
 	public function testIgnoringStandardPorts()
 	{
 		$uri = new Uri('http://example.com:80/');
-		$this->assertEquals('http://example.com/', $uri->toString());
+		$this->assertEquals('http://example.com/', (string) $uri);
 
 		$uri = new Uri('https://example.com:443/');
-		$this->assertEquals('https://example.com/', $uri->toString());
+		$this->assertEquals('https://example.com/', (string) $uri);
 
 		$uri = new Uri('http://example.com:443/');
-		$this->assertEquals('http://example.com:443/', $uri->toString());
+		$this->assertEquals('http://example.com:443/', (string) $uri);
 
 		$uri = new Uri('https://example.com:80/');
-		$this->assertEquals('https://example.com:80/', $uri->toString());
+		$this->assertEquals('https://example.com:80/', (string) $uri);
 	}
 }
