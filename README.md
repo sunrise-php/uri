@@ -22,21 +22,11 @@ composer require sunrise/uri
 use Sunrise\Uri\Uri;
 use Sunrise\Uri\UriFactory;
 
-// creates a new URI with a factory
-$uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
-
-// create a new URI from the server environment with a factory
-$uri = (new UriFactory)->createUriFromServer($_SERVER);
-
-// create a new URI from the given mock with a factory
-$uri = (new UriFactory)->createUriFromServer([
-    'HTTPS' => 'on',
-    'HTTP_HOST' => 'localhost:3000',
-    'REQUEST_URI' => '/path?query',
-]);
-
-// creates a new URI without a factory
+// creates a new URI
 $uri = new Uri('http://user:pass@localhost:3000/path?query#fragment');
+
+// creates a new URI with a factory, is equivalent to `new Uri(...)`
+$uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
 
 // list of withers
 $uri->withScheme();
@@ -49,8 +39,6 @@ $uri->withFragment();
 
 // list of getters
 $uri->getScheme();
-$uri->getUser();
-$uri->getPass();
 $uri->getHost();
 $uri->getPort();
 $uri->getPath();
@@ -59,10 +47,14 @@ $uri->getFragment();
 
 // list of builders
 $uri->getUserInfo();
-$uri->getHostPort();
 $uri->getAuthority();
 
-// magic conversion to a string
+// not PSR-7 methods
+$uri->getUser();
+$uri->getPass();
+$uri->getHostPort();
+
+// converts the URI to string
 (string) $uri;
 ```
 
