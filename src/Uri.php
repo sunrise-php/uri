@@ -33,18 +33,11 @@ class Uri implements UriInterface
 	protected $scheme = '';
 
 	/**
-	 * The URI component "user"
+	 * The URI component "userinfo"
 	 *
 	 * @var string
 	 */
-	protected $user = '';
-
-	/**
-	 * The URI component "pass"
-	 *
-	 * @var string
-	 */
-	protected $pass = '';
+	protected $userinfo = '';
 
 	/**
 	 * The URI component "host"
@@ -99,8 +92,7 @@ class Uri implements UriInterface
 	 */
 	public function withScheme($scheme) : UriInterface
 	{
-		return (clone $this)
-		->setScheme($scheme);
+		return (clone $this)->setScheme($scheme);
 	}
 
 	/**
@@ -110,13 +102,10 @@ class Uri implements UriInterface
 	{
 		if (! (null === $pass))
 		{
-			return (clone $this)
-			->setUser($user)
-			->setPass($pass);
+			return (clone $this)->setUser($user)->setPass($pass);
 		}
 
-		return (clone $this)
-		->setUser($user);
+		return (clone $this)->setUser($user);
 	}
 
 	/**
@@ -124,8 +113,7 @@ class Uri implements UriInterface
 	 */
 	public function withHost($host) : UriInterface
 	{
-		return (clone $this)
-		->setHost($host);
+		return (clone $this)->setHost($host);
 	}
 
 	/**
@@ -133,8 +121,7 @@ class Uri implements UriInterface
 	 */
 	public function withPort($port) : UriInterface
 	{
-		return (clone $this)
-		->setPort($port);
+		return (clone $this)->setPort($port);
 	}
 
 	/**
@@ -142,8 +129,7 @@ class Uri implements UriInterface
 	 */
 	public function withPath($path) : UriInterface
 	{
-		return (clone $this)
-		->setPath($path);
+		return (clone $this)->setPath($path);
 	}
 
 	/**
@@ -151,8 +137,7 @@ class Uri implements UriInterface
 	 */
 	public function withQuery($query) : UriInterface
 	{
-		return (clone $this)
-		->setQuery($query);
+		return (clone $this)->setQuery($query);
 	}
 
 	/**
@@ -160,8 +145,7 @@ class Uri implements UriInterface
 	 */
 	public function withFragment($fragment) : UriInterface
 	{
-		return (clone $this)
-		->setFragment($fragment);
+		return (clone $this)->setFragment($fragment);
 	}
 
 	/**
@@ -175,23 +159,13 @@ class Uri implements UriInterface
 	}
 
 	/**
-	 * Gets the URI component "user"
+	 * Gets the URI component "userinfo"
 	 *
 	 * @return string
 	 */
-	public function getUser() : string
+	public function getUserInfo() : string
 	{
-		return $this->user;
-	}
-
-	/**
-	 * Gets the URI component "pass"
-	 *
-	 * @return string
-	 */
-	public function getPass() : string
-	{
-		return $this->pass;
+		return $this->userinfo;
 	}
 
 	/**
@@ -211,6 +185,18 @@ class Uri implements UriInterface
 	 */
 	public function getPort() : ?int
 	{
+		$scheme = $this->getScheme();
+
+		// The 80 is the default port number for the HTTP protocol.
+		if (80 === $this->port && 'http' === $scheme) {
+			return null;
+		}
+
+		// The 443 is the default port number for the HTTPS protocol.
+		if (443 === $this->port && 'https' === $scheme) {
+			return null;
+		}
+
 		return $this->port;
 	}
 
@@ -245,80 +231,35 @@ class Uri implements UriInterface
 	}
 
 	/**
-	 * Gets the URI user info
-	 *
-	 * @return string
-	 */
-	public function getUserInfo() : string
-	{
-		$result = '';
-
-		if (! ($this->getUser() === ''))
-		{
-			$result .= $this->getUser();
-
-			if (! ($this->getPass() === ''))
-			{
-				$result .= ':' . $this->getPass();
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Gets the URI host and port
-	 *
-	 * @return string
-	 */
-	public function getHostPort() : string
-	{
-		$result = '';
-
-		if (! ($this->getHost() === ''))
-		{
-			$result .= $this->getHost();
-
-			if (! ($this->getPort() === null))
-			{
-				// Ignoring the standard port for http/https scheme
-				if (! ($this->getPort() === 80 && $this->getScheme() === 'http'))
-				{
-					if (! ($this->getPort() === 443 && $this->getScheme() === 'https'))
-					{
-						$result .= ':' . $this->getPort();
-					}
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Gets the URI authority
+	 * Gets the URI component "authority"
 	 *
 	 * @return string
 	 */
 	public function getAuthority() : string
 	{
-		$result = '';
+		$authority = $this->getHost();
 
-		$hostport = $this->getHostPort();
-
-		if (! ($hostport === ''))
+		// Host is the basic subcomponent.
+		if ('' === $authority)
 		{
-			$userinfo = $this->getUserInfo();
-
-			if (! ($userinfo === ''))
-			{
-				$result .= $userinfo . '@';
-			}
-
-			$result .= $hostport;
+			return '';
 		}
 
-		return $result;
+		$userinfo = $this->getUserInfo();
+
+		if (! ('' === $userinfo))
+		{
+			$authority = $userinfo . '@' . $authority;
+		}
+
+		$port = $this->getPort();
+
+		if (! (null === $port))
+		{
+			$authority = $authority . ':' . $port;
+		}
+
+		return $authority;
 	}
 
 	/**
@@ -330,33 +271,44 @@ class Uri implements UriInterface
 	 */
 	public function __toString()
 	{
-		$result = '';
+		$uri = '';
 
-		if (! ($this->getScheme() === ''))
+		$scheme = $this->getScheme();
+
+		if (! ($scheme === ''))
 		{
-			$result .= $this->getScheme() . ':';
+			$uri .= $scheme . ':';
 		}
 
 		$authority = $this->getAuthority();
 
 		if (! ($authority === ''))
 		{
-			$result .= '//' . $authority;
+			$uri .= '//' . $authority;
 		}
 
-		$result .= $this->getPath();
+		$path = $this->getPath();
 
-		if (! ($this->getQuery() === ''))
+		if (! ($path === ''))
 		{
-			$result .= '?' . $this->getQuery();
+			$uri .= $path;
 		}
 
-		if (! ($this->getFragment() === ''))
+		$query = $this->getQuery();
+
+		if (! ($query === ''))
 		{
-			$result .= '#' . $this->getFragment();
+			$uri .= '?' . $query;
 		}
 
-		return $result;
+		$fragment = $this->getFragment();
+
+		if (! ($fragment === ''))
+		{
+			$uri .= '#' . $fragment;
+		}
+
+		return $uri;
 	}
 
 	/**
@@ -403,7 +355,7 @@ class Uri implements UriInterface
 
 		}, $user);
 
-		$this->user = $user;
+		$this->userinfo = $user;
 
 		return $this;
 	}
@@ -427,7 +379,7 @@ class Uri implements UriInterface
 
 		}, $pass);
 
-		$this->pass = $pass;
+		$this->userinfo .= ':' . $pass;
 
 		return $this;
 	}

@@ -25,7 +25,8 @@ use Sunrise\Uri\UriFactory;
 // creates a new URI
 $uri = new Uri('http://user:pass@localhost:3000/path?query#fragment');
 
-// creates a new URI with a factory, is equivalent to `new Uri(...)`
+// creates a new URI with a factory
+// is equivalent to `new Uri(...)`
 $uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
 
 // list of withers
@@ -39,23 +40,46 @@ $uri->withFragment();
 
 // list of getters
 $uri->getScheme();
+$uri->getUserInfo();
 $uri->getHost();
 $uri->getPort();
 $uri->getPath();
 $uri->getQuery();
 $uri->getFragment();
-
-// list of builders
-$uri->getUserInfo();
 $uri->getAuthority();
-
-// not PSR-7 methods
-$uri->getUser();
-$uri->getPass();
-$uri->getHostPort();
 
 // converts the URI to string
 (string) $uri;
+```
+
+### Another schemes
+
+```php
+$uri = new Uri('mailto:test@example.com');
+
+$uri->getScheme(); // mailto
+$uri->getPath(); // test@example.com
+```
+
+```php
+$uri = new Uri('maps:?q=112+E+Chapman+Ave+Orange,+CA+92866');
+
+$uri->getScheme(); // maps
+$uri->getQuery(); // q=112+E+Chapman+Ave+Orange,+CA+92866
+```
+
+```php
+$uri = new Uri('tel:+1-816-555-1212');
+
+$uri->getScheme(); // tel
+$uri->getPath(); // +1-816-555-1212
+```
+
+```php
+$uri = new Uri('urn:oasis:names:specification:docbook:dtd:xml:4.1.2');
+
+$uri->getScheme(); // urn
+$uri->getPath(); // oasis:names:specification:docbook:dtd:xml:4.1.2
 ```
 
 ## Test run
