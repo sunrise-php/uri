@@ -25,8 +25,7 @@ use Sunrise\Uri\UriFactory;
 // creates a new URI
 $uri = new Uri('http://user:pass@localhost:3000/path?query#fragment');
 
-// creates a new URI with a factory
-// is equivalent to `new Uri(...)`
+// creates a new URI with a factory (is equivalent to `new Uri(...)`)
 $uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
 
 // list of withers
