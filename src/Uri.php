@@ -575,18 +575,49 @@ class Uri implements UriInterface
 	{
 		$components = \parse_url($uri);
 
-		if ($components === false)
+		if (false === $components)
 		{
 			throw new Exception\InvalidUriException('Unable to parse URI');
 		}
 
-		isset($components['scheme']) and $this->setScheme($components['scheme']);
-		isset($components['user']) and $this->setUser($components['user']);
-		isset($components['pass']) and $this->setPass($components['pass']);
-		isset($components['host']) and $this->setHost($components['host']);
-		isset($components['port']) and $this->setPort($components['port']);
-		isset($components['path']) and $this->setPath($components['path']);
-		isset($components['query']) and $this->setQuery($components['query']);
-		isset($components['fragment']) and $this->setFragment($components['fragment']);
+		if (isset($components['scheme']))
+		{
+			$this->setScheme($components['scheme']);
+		}
+
+		if (isset($components['user']))
+		{
+			$this->setUser($components['user']);
+		}
+
+		if (isset($components['pass']))
+		{
+			$this->setPass($components['pass']);
+		}
+
+		if (isset($components['host']))
+		{
+			$this->setHost($components['host']);
+		}
+
+		if (isset($components['port']))
+		{
+			$this->setPort($components['port']);
+		}
+
+		if (isset($components['path']))
+		{
+			$this->setPath($components['path']);
+		}
+
+		if (isset($components['query']))
+		{
+			$this->setQuery($components['query']);
+		}
+
+		if (isset($components['fragment']))
+		{
+			$this->setFragment($components['fragment']);
+		}
 	}
 }
