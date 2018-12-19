@@ -314,7 +314,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "scheme"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -345,7 +345,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "user"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -376,7 +376,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "pass"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -407,7 +407,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "host"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -438,7 +438,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "port"
 	 *
-	 * @param null|int $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -470,7 +470,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "path"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -501,7 +501,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "query"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
@@ -532,7 +532,7 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "fragment"
 	 *
-	 * @param string $value
+	 * @param mixed $value
 	 *
 	 * @return UriInterface
 	 *
