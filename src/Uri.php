@@ -314,24 +314,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "scheme"
 	 *
-	 * @param string $scheme
+	 * @param string $value
 	 *
 	 * @return UriInterface
+	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
 	 *
 	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI scheme
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.1
 	 */
-	protected function setScheme(string $scheme) : UriInterface
+	protected function setScheme($value) : UriInterface
 	{
 		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
 
-		if (! \preg_match($regex, $scheme))
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "scheme" must be a string');
+		}
+		else if (! \preg_match($regex, $value))
 		{
 			throw new Exception\InvalidUriComponentException('Invalid URI component "scheme"');
 		}
 
-		$this->scheme = \strtolower($scheme);
+		$this->scheme = \strtolower($value);
 
 		return $this;
 	}
@@ -339,23 +345,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "user"
 	 *
-	 * @param string $user
+	 * @param string $value
 	 *
 	 * @return UriInterface
 	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
+	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
-	protected function setUser(string $user) : UriInterface
+	protected function setUser($value) : UriInterface
 	{
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "user" must be a string');
+		}
+
 		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
-		$user = \preg_replace_callback($regex, function($match)
+		$value = \preg_replace_callback($regex, function($match)
 		{
 			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
 
-		}, $user);
+		}, $value);
 
-		$this->userinfo = $user;
+		$this->userinfo = $value;
 
 		return $this;
 	}
@@ -363,23 +376,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "pass"
 	 *
-	 * @param string $pass
+	 * @param string $value
 	 *
 	 * @return UriInterface
 	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
+	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.1
 	 */
-	protected function setPass(string $pass) : UriInterface
+	protected function setPass($value) : UriInterface
 	{
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "pass" must be a string');
+		}
+
 		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
-		$pass = \preg_replace_callback($regex, function($match)
+		$value = \preg_replace_callback($regex, function($match)
 		{
 			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
 
-		}, $pass);
+		}, $value);
 
-		$this->userinfo .= ':' . $pass;
+		$this->userinfo .= ':' . $value;
 
 		return $this;
 	}
@@ -387,23 +407,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "host"
 	 *
-	 * @param string $host
+	 * @param string $value
 	 *
 	 * @return UriInterface
 	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
+	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.2
 	 */
-	protected function setHost(string $host) : UriInterface
+	protected function setHost($value) : UriInterface
 	{
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "host" must be a string');
+		}
+
 		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
-		$host = \preg_replace_callback($regex, function($match)
+		$value = \preg_replace_callback($regex, function($match)
 		{
 			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
 
-		}, $host);
+		}, $value);
 
-		$this->host = \strtolower($host);
+		$this->host = \strtolower($value);
 
 		return $this;
 	}
@@ -411,25 +438,31 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "port"
 	 *
-	 * @param null|int $port
+	 * @param null|int $value
 	 *
 	 * @return UriInterface
+	 *
+	 * @throws \InvalidArgumentException If the given value is not a null or is not an integer
 	 *
 	 * @throws Exception\InvalidUriComponentException If the given value is not a valid URI port
 	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.2.3
 	 */
-	protected function setPort(?int $port) : UriInterface
+	protected function setPort($value) : UriInterface
 	{
 		$min = 1;
 		$max = 2 ** 16;
 
-		if (! ($port === null || ($port >= $min && $port <= $max)))
+		if (! (\is_null($value) || \is_int($value)))
+		{
+			throw new \InvalidArgumentException('URI component "port" must be a null or an integer');
+		}
+		else if (! ($value === null || ($value >= $min && $value <= $max)))
 		{
 			throw new Exception\InvalidUriComponentException('Invalid URI component "port"');
 		}
 
-		$this->port = $port;
+		$this->port = $value;
 
 		return $this;
 	}
@@ -437,23 +470,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "path"
 	 *
-	 * @param string $path
+	 * @param string $value
 	 *
 	 * @return UriInterface
 	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
+	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.3
 	 */
-	protected function setPath(string $path) : UriInterface
+	protected function setPath($value) : UriInterface
 	{
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "path" must be a string');
+		}
+
 		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/]+)|(.?))/u';
 
-		$path = \preg_replace_callback($regex, function($match)
+		$value = \preg_replace_callback($regex, function($match)
 		{
 			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
 
-		}, $path);
+		}, $value);
 
-		$this->path = $path;
+		$this->path = $value;
 
 		return $this;
 	}
@@ -461,23 +501,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "query"
 	 *
-	 * @param string $query
+	 * @param string $value
 	 *
 	 * @return UriInterface
 	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
+	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.4
 	 */
-	protected function setQuery(string $query) : UriInterface
+	protected function setQuery($value) : UriInterface
 	{
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "query" must be a string');
+		}
+
 		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
 
-		$query = \preg_replace_callback($regex, function($match)
+		$value = \preg_replace_callback($regex, function($match)
 		{
 			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
 
-		}, $query);
+		}, $value);
 
-		$this->query = $query;
+		$this->query = $value;
 
 		return $this;
 	}
@@ -485,23 +532,30 @@ class Uri implements UriInterface
 	/**
 	 * Sets the URI component "fragment"
 	 *
-	 * @param string $fragment
+	 * @param string $value
 	 *
 	 * @return UriInterface
 	 *
+	 * @throws \InvalidArgumentException If the given value is not a string
+	 *
 	 * @link https://tools.ietf.org/html/rfc3986#section-3.5
 	 */
-	protected function setFragment(string $fragment) : UriInterface
+	protected function setFragment($value) : UriInterface
 	{
+		if (! \is_string($value))
+		{
+			throw new \InvalidArgumentException('URI component "fragment" must be a string');
+		}
+
 		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
 
-		$fragment = \preg_replace_callback($regex, function($match)
+		$value = \preg_replace_callback($regex, function($match)
 		{
 			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
 
-		}, $fragment);
+		}, $value);
 
-		$this->fragment = $fragment;
+		$this->fragment = $value;
 
 		return $this;
 	}
@@ -526,44 +580,13 @@ class Uri implements UriInterface
 			throw new Exception\InvalidUriException('Unable to parse URI');
 		}
 
-		if (isset($components['scheme']))
-		{
-			$this->setScheme($components['scheme']);
-		}
-
-		if (isset($components['user']))
-		{
-			$this->setUser($components['user']);
-		}
-
-		if (isset($components['pass']))
-		{
-			$this->setPass($components['pass']);
-		}
-
-		if (isset($components['host']))
-		{
-			$this->setHost($components['host']);
-		}
-
-		if (isset($components['port']))
-		{
-			$this->setPort($components['port']);
-		}
-
-		if (isset($components['path']))
-		{
-			$this->setPath($components['path']);
-		}
-
-		if (isset($components['query']))
-		{
-			$this->setQuery($components['query']);
-		}
-
-		if (isset($components['fragment']))
-		{
-			$this->setFragment($components['fragment']);
-		}
+		isset($components['scheme']) and $this->setScheme($components['scheme']);
+		isset($components['user']) and $this->setUser($components['user']);
+		isset($components['pass']) and $this->setPass($components['pass']);
+		isset($components['host']) and $this->setHost($components['host']);
+		isset($components['port']) and $this->setPort($components['port']);
+		isset($components['path']) and $this->setPath($components['path']);
+		isset($components['query']) and $this->setQuery($components['query']);
+		isset($components['fragment']) and $this->setFragment($components['fragment']);
 	}
 }

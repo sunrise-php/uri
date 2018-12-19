@@ -307,6 +307,206 @@ class UriTest extends TestCase
 		$this->assertEquals('fragment%23fragment', $uri->getFragment(), '', 0.0, 10, false, true);
 	}
 
+	// Withers with invalid data types...
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForScheme
+	 */
+	public function testWithInvalidDataTypeForScheme($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withScheme($value);
+	}
+
+	public function invalidDataTypeProviderForScheme()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[null],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForUser
+	 */
+	public function testWithInvalidDataTypeForUser($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withUserInfo($value);
+	}
+
+	public function invalidDataTypeProviderForUser()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[null],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForPass
+	 */
+	public function testWithInvalidDataTypeForPass($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withUserInfo('user', $value);
+	}
+
+	public function invalidDataTypeProviderForPass()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForHost
+	 */
+	public function testWithInvalidDataTypeForHost($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withHost($value);
+	}
+
+	public function invalidDataTypeProviderForHost()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[null],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForPort
+	 */
+	public function testWithInvalidDataTypeForPort($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withPort($value);
+	}
+
+	public function invalidDataTypeProviderForPort()
+	{
+		return [
+			[true],
+			[false],
+			['a'],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForPath
+	 */
+	public function testWithInvalidDataTypeForPath($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withPath($value);
+	}
+
+	public function invalidDataTypeProviderForPath()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[null],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForQuery
+	 */
+	public function testWithInvalidDataTypeForQuery($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withQuery($value);
+	}
+
+	public function invalidDataTypeProviderForQuery()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[null],
+			[function(){}],
+		];
+	}
+
+	/**
+	 * @dataProvider invalidDataTypeProviderForFragment
+	 */
+	public function testWithInvalidDataTypeForFragment($value)
+	{
+		$this->expectException(\InvalidArgumentException::class);
+
+		(new Uri)->withFragment($value);
+	}
+
+	public function invalidDataTypeProviderForFragment()
+	{
+		return [
+			[true],
+			[false],
+			[0],
+			[0.0],
+			[[]],
+			[new \stdClass],
+			[\STDOUT],
+			[null],
+			[function(){}],
+		];
+	}
+
 	// Builders...
 
 	public function testGetAuthority()
