@@ -5,4 +5,8 @@
 			<directory>./tests/</directory>
 		</testsuite>
 	</testsuites>
+
+	<php>
+		<const name="URI_FACTORY" value="Sunrise\Uri\UriFactory"/>
+	</php>
 </phpunit>
