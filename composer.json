@@ -17,6 +17,9 @@
 	"require-dev": {
 		"phpunit/phpunit": "7.4.3"
 	},
+	"provide": {
+		"psr/http-message-implementation": "1.0"
+	},
 	"autoload": {
 		"psr-4": {
 			"Sunrise\\Uri\\": "src/"
