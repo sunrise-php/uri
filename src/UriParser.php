@@ -118,37 +118,14 @@ class UriParser
 			throw new InvalidUriException('Unable to parse URI');
 		}
 
-		$this->scheme = new Scheme(
-			$components['scheme'] ?? ''
-		);
-
-		$this->user = new User(
-			$components['user'] ?? ''
-		);
-
-		$this->pass = new Pass(
-			$components['pass'] ?? ''
-		);
-
-		$this->host = new Host(
-			$components['host'] ?? ''
-		);
-
-		$this->port = new Port(
-			$components['port'] ?? null
-		);
-
-		$this->path = new Path(
-			$components['path'] ?? ''
-		);
-
-		$this->query = new Query(
-			$components['query'] ?? ''
-		);
-
-		$this->fragment = new Fragment(
-			$components['fragment'] ?? ''
-		);
+		$this->scheme = new Scheme($components['scheme'] ?? '');
+		$this->user = new User($components['user'] ?? '');
+		$this->pass = new Pass($components['pass'] ?? '');
+		$this->host = new Host($components['host'] ?? '');
+		$this->port = new Port($components['port'] ?? null);
+		$this->path = new Path($components['path'] ?? '');
+		$this->query = new Query($components['query'] ?? '');
+		$this->fragment = new Fragment($components['fragment'] ?? '');
 
 		$this->userinfo = new UserInfo(
 			$components['user'] ?? '',

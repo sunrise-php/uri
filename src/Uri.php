@@ -89,8 +89,7 @@ class Uri implements UriInterface
 	public function __construct($uri = '')
 	{
 		// resource savings...
-		if ('' === $uri)
-		{
+		if ('' === $uri) {
 			return;
 		}
 
@@ -330,35 +329,35 @@ class Uri implements UriInterface
 
 		$scheme = $this->getScheme();
 
-		if (! ($scheme === ''))
+		if (! ('' === $scheme))
 		{
 			$uri .= $scheme . ':';
 		}
 
 		$authority = $this->getAuthority();
 
-		if (! ($authority === ''))
+		if (! ('' === $authority))
 		{
 			$uri .= '//' . $authority;
 		}
 
 		$path = $this->getPath();
 
-		if (! ($path === ''))
+		if (! ('' === $path))
 		{
 			$uri .= $path;
 		}
 
 		$query = $this->getQuery();
 
-		if (! ($query === ''))
+		if (! ('' === $query))
 		{
 			$uri .= '?' . $query;
 		}
 
 		$fragment = $this->getFragment();
 
-		if (! ($fragment === ''))
+		if (! ('' === $fragment))
 		{
 			$uri .= '#' . $fragment;
 		}
