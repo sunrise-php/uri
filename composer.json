@@ -1,7 +1,7 @@
 {
     "name": "sunrise/uri",
-    "description": "Sunrise URI",
-    "keywords": ["fenric", "sunrise", "uri", "rfc-3986", "psr-7", "psr-17"],
+    "description": "Simple URI wrapper for PHP 7.1+ based on RFC-3986, PSR-7 & PSR-17",
+    "keywords": ["fenric", "sunrise", "uri", "parser", "rfc-3986", "psr-7", "psr-17"],
     "homepage": "https://github.com/sunrise-php/uri",
     "license": "MIT",
     "authors": [{
