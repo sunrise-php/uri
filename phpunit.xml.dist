@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
-	<testsuites>
-		<testsuite name="Sunrise URI Test Suite">
-			<directory>./tests/</directory>
-		</testsuite>
-	</testsuites>
-
-	<php>
-		<const name="URI_FACTORY" value="Sunrise\Uri\UriFactory"/>
-	</php>
+    <testsuites>
+        <testsuite name="Sunrise URI Test Suite">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <const name="URI_FACTORY" value="Sunrise\Uri\UriFactory"/>
+    </php>
 </phpunit>
