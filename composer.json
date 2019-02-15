@@ -26,6 +26,11 @@
             "Sunrise\\Uri\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Sunrise\\Uri\\Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "test": [
             "phpunit --colors=always --coverage-text"
