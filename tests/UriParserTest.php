@@ -10,8 +10,6 @@ class UriParserTest extends TestCase
 {
 	public const TEST_URI = 'scheme://user:pass@host:3000/path?query#fragment';
 
-	// Constructor...
-
 	public function testConstructor()
 	{
 		$uri = new UriParser(self::TEST_URI);
