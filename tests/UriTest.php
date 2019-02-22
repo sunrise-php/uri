@@ -38,6 +38,7 @@ class UriTest extends TestCase
 	public function testConstructorWithInvalidUri()
 	{
 		$this->expectException(InvalidUriException::class);
+		$this->expectExceptionMessage('Unable to parse URI');
 
 		new Uri(':');
 	}
@@ -247,6 +248,7 @@ class UriTest extends TestCase
 	public function testWithInvalidScheme()
 	{
 		$this->expectException(InvalidUriComponentException::class);
+		$this->expectExceptionMessage('Invalid URI component "scheme"');
 
 		(new Uri(self::TEST_URI))->withScheme('scheme:');
 	}
@@ -268,6 +270,7 @@ class UriTest extends TestCase
 	public function testWithInvalidPortIsLessThanZero()
 	{
 		$this->expectException(InvalidUriComponentException::class);
+		$this->expectExceptionMessage('Invalid URI component "port"');
 
 		(new Uri(self::TEST_URI))->withPort(-1);
 	}
@@ -275,6 +278,7 @@ class UriTest extends TestCase
 	public function testWithInvalidPortIsZero()
 	{
 		$this->expectException(InvalidUriComponentException::class);
+		$this->expectExceptionMessage('Invalid URI component "port"');
 
 		(new Uri(self::TEST_URI))->withPort(0);
 	}
@@ -282,6 +286,7 @@ class UriTest extends TestCase
 	public function testWithInvalidPortIsTooLarge()
 	{
 		$this->expectException(InvalidUriComponentException::class);
+		$this->expectExceptionMessage('Invalid URI component "port"');
 
 		(new Uri(self::TEST_URI))->withPort((2 ** 16) + 1);
 	}
@@ -315,6 +320,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForScheme($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "scheme" must be a string');
 
 		(new Uri)->withScheme($value);
 	}
@@ -340,6 +346,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForUser($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "user" must be a string');
 
 		(new Uri)->withUserInfo($value);
 	}
@@ -365,6 +372,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForPass($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "pass" must be a string');
 
 		(new Uri)->withUserInfo('user', $value);
 	}
@@ -389,6 +397,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForHost($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "host" must be a string');
 
 		(new Uri)->withHost($value);
 	}
@@ -414,6 +423,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForPort($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "port" must be an integer');
 
 		(new Uri)->withPort($value);
 	}
@@ -438,6 +448,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForPath($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "path" must be a string');
 
 		(new Uri)->withPath($value);
 	}
@@ -463,6 +474,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForQuery($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "query" must be a string');
 
 		(new Uri)->withQuery($value);
 	}
@@ -488,6 +500,7 @@ class UriTest extends TestCase
 	public function testWithInvalidDataTypeForFragment($value)
 	{
 		$this->expectException(\InvalidArgumentException::class);
+		$this->expectExceptionMessage('URI component "fragment" must be a string');
 
 		(new Uri)->withFragment($value);
 	}
@@ -564,12 +577,12 @@ class UriTest extends TestCase
 	public function testIgnoringStandardPorts()
 	{
 		$uri = new Uri('http://example.com:80/');
-		$this->assertEquals(null, $uri->getPort());
+		$this->assertNull($uri->getPort());
 		$this->assertEquals('example.com', $uri->getAuthority());
 		$this->assertEquals('http://example.com/', (string) $uri);
 
 		$uri = new Uri('https://example.com:443/');
-		$this->assertEquals(null, $uri->getPort());
+		$this->assertNull($uri->getPort());
 		$this->assertEquals('example.com', $uri->getAuthority());
 		$this->assertEquals('https://example.com/', (string) $uri);
 
