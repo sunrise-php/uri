@@ -2,7 +2,6 @@
 
 [![Gitter](https://badges.gitter.im/sunrise-php/support.png)](https://gitter.im/sunrise-php/support)
 [![Build Status](https://api.travis-ci.com/sunrise-php/uri.svg?branch=master)](https://travis-ci.com/sunrise-php/uri)
-[![CodeFactor](https://www.codefactor.io/repository/github/sunrise-php/uri/badge)](https://www.codefactor.io/repository/github/sunrise-php/uri)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunrise-php/uri/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunrise-php/uri/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/sunrise-php/uri/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sunrise-php/uri/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/sunrise/uri/v/stable?format=flat)](https://packagist.org/packages/sunrise/uri)
@@ -15,7 +14,7 @@
 
 ## Installation
 
-```
+```bash
 composer require sunrise/uri
 ```
 
