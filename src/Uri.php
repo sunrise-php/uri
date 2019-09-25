@@ -134,6 +134,7 @@ class Uri implements UriInterface
 		$component = new Scheme($scheme);
 
 		$clone->scheme = $component->present();
+		$clone->port = $clone->getStandardPort();
 
 		return $clone;
 	}
@@ -245,25 +246,27 @@ class Uri implements UriInterface
 	{
 		return $this->host;
 	}
-
+	
+    /**
+     * Returns standard port for current scheme.
+     * 
+     * @return int|null
+     */
+    public function getStandardPort() : ?int
+    {
+        if (! $this->scheme) {
+            return null;
+        }
+        $port = getservbyname($this->scheme, 'tcp') ?: getservbyname($this->scheme, 'udp');
+        return $port ?: null;
+    }
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	public function getPort() : ?int
 	{
-		$scheme = $this->getScheme();
-
-		// The 80 is the default port number for the HTTP protocol.
-		if (80 === $this->port && 'http' === $scheme) {
-			return null;
-		}
-
-		// The 443 is the default port number for the HTTPS protocol.
-		if (443 === $this->port && 'https' === $scheme) {
-			return null;
-		}
-
-		return $this->port;
+		return $this->port == $this->getStandardPort() ? null : $this->port;
 	}
 
 	/**
