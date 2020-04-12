@@ -24,6 +24,11 @@ use Sunrise\Uri\Component\Query;
 use Sunrise\Uri\Component\Fragment;
 
 /**
+ * Import functions
+ */
+use function getservbyname;
+
+/**
  * Uniform Resource Identifier
  *
  * @link https://tools.ietf.org/html/rfc3986
@@ -264,6 +269,30 @@ class Uri implements UriInterface
 		}
 
 		return $this->port;
+	}
+
+	/**
+	 * Gets standard port number associated with the URI scheme
+	 *
+	 * [!] It's not PSR-7 method.
+	 *
+	 * @return null|int
+	 */
+	public function getStandardPort() : ?int
+	{
+		$scheme = $this->getScheme();
+
+		$servicePort = getservbyname($scheme, 'tcp');
+		if (false !== $servicePort) {
+			return $servicePort;
+		}
+
+		$servicePort = getservbyname($scheme, 'udp');
+		if (false !== $servicePort) {
+			return $servicePort;
+		}
+
+		return null;
 	}
 
 	/**
