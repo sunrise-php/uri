@@ -94,6 +94,18 @@ class UriTest extends TestCase
 		$this->assertEquals('fragment', $uri->getFragment());
 	}
 
+	public function testGetStandardPort() : void
+	{
+		$uri = new Uri('http://host:3000');
+		$this->assertEquals(80, $uri->getStandardPort());
+
+		$uri = new Uri('https://host:3000');
+		$this->assertEquals(443, $uri->getStandardPort());
+
+		$uri = new Uri('ftp://host:3000');
+		$this->assertEquals(21, $uri->getStandardPort());
+	}
+
 	// Withers...
 
 	public function testWithScheme()
