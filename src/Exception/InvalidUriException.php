@@ -20,4 +20,5 @@ use InvalidArgumentException;
  * InvalidUriException
  */
 class InvalidUriException extends InvalidArgumentException
-{}
+{
+}

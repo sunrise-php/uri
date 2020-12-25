@@ -17,10 +17,10 @@ namespace Sunrise\Uri\Component;
 interface ComponentInterface
 {
 
-	/**
-	 * Presents the component value
-	 *
-	 * @return mixed
-	 */
-	public function present();
+    /**
+     * Presents the component value
+     *
+     * @return mixed
+     */
+    public function present();
 }

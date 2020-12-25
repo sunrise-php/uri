@@ -24,47 +24,46 @@ use Sunrise\Uri\Exception\InvalidUriComponentException;
 class Scheme implements ComponentInterface
 {
 
-	/**
-	 * The component value
-	 *
-	 * @var string
-	 */
-	protected $value = '';
+    /**
+     * The component value
+     *
+     * @var string
+     */
+    protected $value = '';
 
-	/**
-	 * Constructor of the class
-	 *
-	 * @param mixed $value
-	 *
-	 * @throws InvalidUriComponentException
-	 */
-	public function __construct($value)
-	{
-		$regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
+    /**
+     * Constructor of the class
+     *
+     * @param mixed $value
+     *
+     * @throws InvalidUriComponentException
+     */
+    public function __construct($value)
+    {
+        $regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
 
-		if ('' === $value)
-		{
-			return;
-		}
-		else if (! \is_string($value))
-		{
-			throw new InvalidUriComponentException('URI component "scheme" must be a string');
-		}
-		else if (! \preg_match($regex, $value))
-		{
-			throw new InvalidUriComponentException('Invalid URI component "scheme"');
-		}
+        if ('' === $value) {
+            return;
+        }
 
-		$this->value = $value;
-	}
+        if (! \is_string($value)) {
+            throw new InvalidUriComponentException('URI component "scheme" must be a string');
+        }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return string
-	 */
-	public function present() : string
-	{
-		return \strtolower($this->value);
-	}
+        if (! \preg_match($regex, $value)) {
+            throw new InvalidUriComponentException('Invalid URI component "scheme"');
+        }
+
+        $this->value = $value;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function present() : string
+    {
+        return \strtolower($this->value);
+    }
 }

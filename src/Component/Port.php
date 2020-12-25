@@ -24,48 +24,47 @@ use Sunrise\Uri\Exception\InvalidUriComponentException;
 class Port implements ComponentInterface
 {
 
-	/**
-	 * The component value
-	 *
-	 * @var null|int
-	 */
-	protected $value;
+    /**
+     * The component value
+     *
+     * @var null|int
+     */
+    protected $value;
 
-	/**
-	 * Constructor of the class
-	 *
-	 * @param mixed $value
-	 *
-	 * @throws InvalidUriComponentException
-	 */
-	public function __construct($value)
-	{
-		$min = 1;
-		$max = 2 ** 16;
+    /**
+     * Constructor of the class
+     *
+     * @param mixed $value
+     *
+     * @throws InvalidUriComponentException
+     */
+    public function __construct($value)
+    {
+        $min = 1;
+        $max = 2 ** 16;
 
-		if (null === $value)
-		{
-			return;
-		}
-		else if (! \is_int($value))
-		{
-			throw new InvalidUriComponentException('URI component "port" must be an integer');
-		}
-		else if (! ($value >= $min && $value <= $max))
-		{
-			throw new InvalidUriComponentException('Invalid URI component "port"');
-		}
+        if (null === $value) {
+            return;
+        }
 
-		$this->value = $value;
-	}
+        if (! \is_int($value)) {
+            throw new InvalidUriComponentException('URI component "port" must be an integer');
+        }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return null|int
-	 */
-	public function present() : ?int
-	{
-		return $this->value;
-	}
+        if (! ($value >= $min && $value <= $max)) {
+            throw new InvalidUriComponentException('Invalid URI component "port"');
+        }
+
+        $this->value = $value;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return null|int
+     */
+    public function present() : ?int
+    {
+        return $this->value;
+    }
 }

@@ -19,40 +19,37 @@ namespace Sunrise\Uri\Component;
 class UserInfo implements ComponentInterface
 {
 
-	/**
-	 * The component value
-	 *
-	 * @var string
-	 */
-	protected $value = '';
+    /**
+     * The component value
+     *
+     * @var string
+     */
+    protected $value = '';
 
-	/**
-	 * Constructor of the class
-	 *
-	 * @param mixed $user
-	 * @param mixed $pass
-	 */
-	public function __construct($user, $pass = null)
-	{
-		$user = new User($user);
+    /**
+     * Constructor of the class
+     *
+     * @param mixed $user
+     * @param mixed $pass
+     */
+    public function __construct($user, $pass = null)
+    {
+        $user = new User($user);
+        $this->value = $user->present();
 
-		$this->value = $user->present();
+        if (! (null === $pass)) {
+            $pass = new Pass($pass);
+            $this->value .= ':' . $pass->present();
+        }
+    }
 
-		if (! (null === $pass))
-		{
-			$pass = new Pass($pass);
-
-			$this->value .= ':' . $pass->present();
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return string
-	 */
-	public function present() : string
-	{
-		return $this->value;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function present() : string
+    {
+        return $this->value;
+    }
 }
