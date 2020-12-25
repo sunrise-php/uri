@@ -25,11 +25,11 @@ use Psr\Http\Message\UriInterface;
 class UriFactory implements UriFactoryInterface
 {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function createUri(string $uri = '') : UriInterface
-	{
-		return new Uri($uri);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function createUri(string $uri = '') : UriInterface
+    {
+        return new Uri($uri);
+    }
 }

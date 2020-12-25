@@ -24,47 +24,44 @@ use Sunrise\Uri\Exception\InvalidUriComponentException;
 class Query implements ComponentInterface
 {
 
-	/**
-	 * The component value
-	 *
-	 * @var string
-	 */
-	protected $value = '';
+    /**
+     * The component value
+     *
+     * @var string
+     */
+    protected $value = '';
 
-	/**
-	 * Constructor of the class
-	 *
-	 * @param mixed $value
-	 *
-	 * @throws InvalidUriComponentException
-	 */
-	public function __construct($value)
-	{
-		if ('' === $value)
-		{
-			return;
-		}
-		else if (! \is_string($value))
-		{
-			throw new InvalidUriComponentException('URI component "query" must be a string');
-		}
+    /**
+     * Constructor of the class
+     *
+     * @param mixed $value
+     *
+     * @throws InvalidUriComponentException
+     */
+    public function __construct($value)
+    {
+        if ('' === $value) {
+            return;
+        }
 
-		$regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
+        if (! \is_string($value)) {
+            throw new InvalidUriComponentException('URI component "query" must be a string');
+        }
 
-		$this->value = \preg_replace_callback($regex, function($match)
-		{
-			return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+        $regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
 
-		}, $value);
-	}
+        $this->value = \preg_replace_callback($regex, function ($match) {
+            return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+        }, $value);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return string
-	 */
-	public function present() : string
-	{
-		return $this->value;
-	}
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function present() : string
+    {
+        return $this->value;
+    }
 }
