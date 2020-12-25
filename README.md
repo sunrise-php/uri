@@ -1,7 +1,7 @@
-## Simple URI wrapper for PHP 7.1+ based on RFC-3986, PSR-7 & PSR-17
+## URI wrapper for PHP 7.1+ (incl. PHP 8) based on RFC-3986, PSR-7 & PSR-17
 
 [![Gitter](https://badges.gitter.im/sunrise-php/support.png)](https://gitter.im/sunrise-php/support)
-[![Build Status](https://api.travis-ci.org/sunrise-php/uri.svg?branch=master)](https://travis-ci.org/sunrise-php/uri)
+[![Build Status](https://scrutinizer-ci.com/g/sunrise-php/uri/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sunrise-php/uri/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sunrise-php/uri/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sunrise-php/uri/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/sunrise-php/uri/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sunrise-php/uri/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/sunrise/uri/v/stable?format=flat)](https://packagist.org/packages/sunrise/uri)
@@ -88,10 +88,6 @@ $uri->getPath(); // oasis:names:specification:docbook:dtd:xml:4.1.2
 ```bash
 php vendor/bin/phpunit
 ```
-
-## Api documentation
-
-https://phpdoc.fenric.ru/
 
 ## Useful links
 
