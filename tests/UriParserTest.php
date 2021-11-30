@@ -29,62 +29,62 @@ class UriParserTest extends TestCase
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('scheme', $uri->getScheme()->present());
+        $this->assertSame('scheme', $uri->getScheme()->present());
     }
 
     public function testGetUser()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('user', $uri->getUser()->present());
+        $this->assertSame('user', $uri->getUser()->present());
     }
 
     public function testGetPass()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('pass', $uri->getPass()->present());
+        $this->assertSame('pass', $uri->getPass()->present());
     }
 
     public function testGetHost()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('host', $uri->getHost()->present());
+        $this->assertSame('host', $uri->getHost()->present());
     }
 
     public function testGetPort()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals(3000, $uri->getPort()->present());
+        $this->assertSame(3000, $uri->getPort()->present());
     }
 
     public function testGetPath()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('/path', $uri->getPath()->present());
+        $this->assertSame('/path', $uri->getPath()->present());
     }
 
     public function testGetQuery()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('query', $uri->getQuery()->present());
+        $this->assertSame('query', $uri->getQuery()->present());
     }
 
     public function testGetFragment()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('fragment', $uri->getFragment()->present());
+        $this->assertSame('fragment', $uri->getFragment()->present());
     }
 
     public function testGetUserInfo()
     {
         $uri = new UriParser(self::TEST_URI);
 
-        $this->assertEquals('user:pass', $uri->getUserInfo()->present());
+        $this->assertSame('user:pass', $uri->getUserInfo()->present());
     }
 }

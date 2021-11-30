@@ -22,7 +22,7 @@ class UriFactoryTest extends TestCase
 
         $this->assertInstanceOf(UriInterface::class, $uri);
 
-        $this->assertEquals('/', $uri->getPath());
+        $this->assertSame('/', $uri->getPath());
     }
 
     public function testCreateUriWithoutUri()
@@ -31,7 +31,7 @@ class UriFactoryTest extends TestCase
 
         $this->assertInstanceOf(UriInterface::class, $uri);
 
-        $this->assertEquals('', $uri->getPath());
+        $this->assertSame('', $uri->getPath());
     }
 
     public function testCreateUriWithEmptyUri()
@@ -40,6 +40,6 @@ class UriFactoryTest extends TestCase
 
         $this->assertInstanceOf(UriInterface::class, $uri);
 
-        $this->assertEquals('', $uri->getPath());
+        $this->assertSame('', $uri->getPath());
     }
 }
