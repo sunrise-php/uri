@@ -27,6 +27,8 @@ use Sunrise\Uri\Component\Fragment;
  * Import functions
  */
 use function getservbyname;
+use function ltrim;
+use function strncmp;
 
 /**
  * Uniform Resource Identifier
@@ -351,6 +353,25 @@ class Uri implements UriInterface
 
         $path = $this->getPath();
         if ($path !== '') {
+            // https://github.com/sunrise-php/uri/issues/31
+            // https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
+            //
+            // If a URI contains an authority component,
+            // then the path component must either be empty
+            // or begin with a slash ("/") character.
+            if ($authority !== '' && strncmp($path, '/', 1) !== 0) {
+                $path = '/' . $path;
+            }
+
+            // https://github.com/sunrise-php/uri/issues/31
+            // https://datatracker.ietf.org/doc/html/rfc3986#section-3.3
+            //
+            // If a URI does not contain an authority component,
+            // then the path cannot begin with two slash characters ("//").
+            if ($authority === '' && strncmp($path, '//', 2) === 0) {
+                $path = '/' . ltrim($path, '/');
+            }
+
             $uri .= $path;
         }
 
