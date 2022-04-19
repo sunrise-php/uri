@@ -567,6 +567,21 @@ class UriTest extends TestCase
         $this->assertSame(self::TEST_URI, (string) $uri);
     }
 
+    public function testToStringIssue31()
+    {
+        $uri = new Uri('//username@hostname');
+        $uri = $uri->withPath('pathname');
+        $this->assertSame('//username@hostname/pathname', $uri->__toString());
+
+        $uri = new Uri('scheme:');
+        $uri = $uri->withPath('//pathname');
+        $this->assertSame('scheme:/pathname', $uri->__toString());
+
+        $uri = new Uri('scheme:');
+        $uri = $uri->withPath('///pathname');
+        $this->assertSame('scheme:/pathname', $uri->__toString());
+    }
+
     // Normalizes...
 
     public function testNormalizeScheme()
