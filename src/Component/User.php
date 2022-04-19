@@ -32,11 +32,11 @@ class User implements ComponentInterface
 {
 
     /**
-     * Regular expression to parse the component value
+     * Regular expression to normalize the component value
      *
      * @var string
      */
-    private const PARSE_REGEX = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
+    private const NORMALIZE_REGEX = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=]+)|(.?))/u';
 
     /**
      * The component value
@@ -62,7 +62,7 @@ class User implements ComponentInterface
             throw new InvalidUriComponentException('URI component "user" must be a string');
         }
 
-        $this->value = preg_replace_callback(self::PARSE_REGEX, function (array $match) : string {
+        $this->value = preg_replace_callback(self::NORMALIZE_REGEX, function (array $match) : string {
             /** @var array{0: string, 1?: string} $match */
 
             return isset($match[1]) ? rawurlencode($match[1]) : $match[0];
