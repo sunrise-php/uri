@@ -1,4 +1,4 @@
-## URI wrapper for PHP 7.1+ (incl. PHP 8) based on RFC-3986, PSR-7 & PSR-17
+## URI wrapper for PHP 7.1+ based on RFC-3986, PSR-7 and PSR-17
 
 [![Gitter](https://badges.gitter.im/sunrise-php/support.png)](https://gitter.im/sunrise-php/support)
 [![Build Status](https://scrutinizer-ci.com/g/sunrise-php/uri/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sunrise-php/uri/build-status/master)
@@ -8,9 +8,7 @@
 [![Total Downloads](https://poser.pugx.org/sunrise/uri/downloads?format=flat)](https://packagist.org/packages/sunrise/uri)
 [![License](https://poser.pugx.org/sunrise/uri/license?format=flat)](https://packagist.org/packages/sunrise/uri)
 
-## Awards
-
-[![SymfonyInsight](https://insight.symfony.com/projects/967729eb-31ed-42e0-be84-b738e87c36d2/big.svg)](https://insight.symfony.com/projects/967729eb-31ed-42e0-be84-b738e87c36d2)
+---
 
 ## Installation
 
@@ -27,7 +25,7 @@ use Sunrise\Uri\UriFactory;
 // creates a new URI
 $uri = new Uri('http://user:pass@localhost:3000/path?query#fragment');
 
-// creates a new URI with a factory (is equivalent to `new Uri(...)`)
+// creates a new URI with a factory (is equivalent to new Uri(string))
 $uri = (new UriFactory)->createUri('http://user:pass@localhost:3000/path?query#fragment');
 
 // list of withers
@@ -49,7 +47,7 @@ $uri->getQuery();
 $uri->getFragment();
 $uri->getAuthority();
 
-// converts the URI to string
+// converts the URI to a string
 (string) $uri;
 ```
 
@@ -82,6 +80,8 @@ $uri = new Uri('urn:oasis:names:specification:docbook:dtd:xml:4.1.2');
 $uri->getScheme(); // urn
 $uri->getPath(); // oasis:names:specification:docbook:dtd:xml:4.1.2
 ```
+
+---
 
 ## Test run
 
