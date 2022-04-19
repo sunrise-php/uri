@@ -34,18 +34,14 @@ class UserInfo implements ComponentInterface
      */
     public function __construct($user, $pass = null)
     {
-        $user = new User($user);
-        $this->value = $user->present();
+        $this->value = (new User($user))->present();
 
-        if (! (null === $pass)) {
-            $pass = new Pass($pass);
-            $this->value .= ':' . $pass->present();
+        if (isset($pass)) {
+            $this->value .= ':' . (new Pass($pass))->present();
         }
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return string
      */
     public function present() : string

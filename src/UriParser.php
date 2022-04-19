@@ -27,6 +27,12 @@ use Sunrise\Uri\Component\UserInfo;
 use Sunrise\Uri\Exception\InvalidUriException;
 
 /**
+ * Import functions
+ */
+use function is_string;
+use function parse_url;
+
+/**
  * UriParser
  */
 class UriParser
@@ -35,63 +41,63 @@ class UriParser
     /**
      * The parsed URI component "scheme"
      *
-     * @var ComponentInterface
+     * @var Scheme
      */
     protected $scheme;
 
     /**
      * The parsed URI component "user"
      *
-     * @var ComponentInterface
+     * @var User
      */
     protected $user;
 
     /**
      * The parsed URI component "pass"
      *
-     * @var ComponentInterface
+     * @var Pass
      */
     protected $pass;
 
     /**
      * The parsed URI component "host"
      *
-     * @var ComponentInterface
+     * @var Host
      */
     protected $host;
 
     /**
      * The parsed URI component "port"
      *
-     * @var ComponentInterface
+     * @var Port
      */
     protected $port;
 
     /**
      * The parsed URI component "path"
      *
-     * @var ComponentInterface
+     * @var Path
      */
     protected $path;
 
     /**
      * The parsed URI component "query"
      *
-     * @var ComponentInterface
+     * @var Query
      */
     protected $query;
 
     /**
      * The parsed URI component "fragment"
      *
-     * @var ComponentInterface
+     * @var Fragment
      */
     protected $fragment;
 
     /**
      * The parsed URI component "userinfo"
      *
-     * @var ComponentInterface
+     * @var UserInfo
      */
     protected $userinfo;
 
@@ -106,12 +112,12 @@ class UriParser
      */
     public function __construct($uri)
     {
-        if (! \is_string($uri)) {
+        if (!is_string($uri)) {
             throw new InvalidUriException('URI must be a string');
         }
 
-        $components = \parse_url($uri);
-        if (false === $components) {
+        $components = parse_url($uri);
+        if ($components === false) {
             throw new InvalidUriException('Unable to parse URI');
         }
 
@@ -133,9 +139,9 @@ class UriParser
     /**
      * Gets the parsed URI component "scheme"
      *
-     * @return ComponentInterface
+     * @return Scheme
      */
-    public function getScheme() : ComponentInterface
+    public function getScheme() : Scheme
     {
         return $this->scheme;
     }
@@ -143,9 +149,9 @@ class UriParser
     /**
      * Gets the parsed URI component "user"
      *
-     * @return ComponentInterface
+     * @return User
      */
-    public function getUser() : ComponentInterface
+    public function getUser() : User
     {
         return $this->user;
     }
@@ -153,9 +159,9 @@ class UriParser
     /**
      * Gets the parsed URI component "pass"
      *
-     * @return ComponentInterface
+     * @return Pass
      */
-    public function getPass() : ComponentInterface
+    public function getPass() : Pass
     {
         return $this->pass;
     }
@@ -163,9 +169,9 @@ class UriParser
     /**
      * Gets the parsed URI component "host"
      *
-     * @return ComponentInterface
+     * @return Host
      */
-    public function getHost() : ComponentInterface
+    public function getHost() : Host
     {
         return $this->host;
     }
@@ -173,9 +179,9 @@ class UriParser
     /**
      * Gets the parsed URI component "port"
      *
-     * @return ComponentInterface
+     * @return Port
      */
-    public function getPort() : ComponentInterface
+    public function getPort() : Port
     {
         return $this->port;
     }
@@ -183,9 +189,9 @@ class UriParser
     /**
      * Gets the parsed URI component "path"
      *
-     * @return ComponentInterface
+     * @return Path
      */
-    public function getPath() : ComponentInterface
+    public function getPath() : Path
     {
         return $this->path;
     }
@@ -193,9 +199,9 @@ class UriParser
     /**
      * Gets the parsed URI component "query"
      *
-     * @return ComponentInterface
+     * @return Query
      */
-    public function getQuery() : ComponentInterface
+    public function getQuery() : Query
     {
         return $this->query;
     }
@@ -203,9 +209,9 @@ class UriParser
     /**
      * Gets the parsed URI component "fragment"
      *
-     * @return ComponentInterface
+     * @return Fragment
      */
-    public function getFragment() : ComponentInterface
+    public function getFragment() : Fragment
     {
         return $this->fragment;
     }
@@ -213,9 +219,9 @@ class UriParser
     /**
      * Gets the parsed URI component "userinfo"
      *
-     * @return ComponentInterface
+     * @return UserInfo
      */
-    public function getUserInfo() : ComponentInterface
+    public function getUserInfo() : UserInfo
     {
         return $this->userinfo;
     }
