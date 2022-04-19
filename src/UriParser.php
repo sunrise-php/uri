@@ -27,73 +27,72 @@ use Sunrise\Uri\Component\UserInfo;
 use Sunrise\Uri\Exception\InvalidUriException;
 
 /**
+ * Import functions
+ */
+use function is_string;
+use function parse_url;
+
+/**
  * UriParser
  */
 class UriParser
 {
 
     /**
-     * The parsed URI component "scheme"
+     * URI component "scheme"
      *
-     * @var ComponentInterface
+     * @var Scheme|null
      */
     protected $scheme;
 
     /**
-     * The parsed URI component "user"
+     * URI component "user"
      *
-     * @var ComponentInterface
+     * @var User|null
      */
     protected $user;
 
     /**
-     * The parsed URI component "pass"
+     * URI component "pass"
      *
-     * @var ComponentInterface
+     * @var Pass|null
      */
     protected $pass;
 
     /**
-     * The parsed URI component "host"
+     * URI component "host"
      *
-     * @var ComponentInterface
+     * @var Host|null
      */
     protected $host;
 
     /**
-     * The parsed URI component "port"
+     * URI component "port"
      *
-     * @var ComponentInterface
+     * @var Port|null
      */
     protected $port;
 
     /**
-     * The parsed URI component "path"
+     * URI component "path"
      *
-     * @var ComponentInterface
+     * @var Path|null
      */
     protected $path;
 
     /**
-     * The parsed URI component "query"
+     * URI component "query"
      *
-     * @var ComponentInterface
+     * @var Query|null
      */
     protected $query;
 
     /**
-     * The parsed URI component "fragment"
+     * URI component "fragment"
      *
-     * @var ComponentInterface
+     * @var Fragment|null
      */
     protected $fragment;
-
-    /**
-     * The parsed URI component "userinfo"
-     *
-     * @var ComponentInterface
-     */
-    protected $userinfo;
 
     /**
      * Constructor of the class
@@ -106,117 +105,143 @@ class UriParser
      */
     public function __construct($uri)
     {
-        if (! \is_string($uri)) {
+        if ($uri === '') {
+            return;
+        }
+
+        if (!is_string($uri)) {
             throw new InvalidUriException('URI must be a string');
         }
 
-        $components = \parse_url($uri);
-        if (false === $components) {
+        $components = parse_url($uri);
+        if ($components === false) {
             throw new InvalidUriException('Unable to parse URI');
         }
 
-        $this->scheme = new Scheme($components['scheme'] ?? '');
-        $this->user = new User($components['user'] ?? '');
-        $this->pass = new Pass($components['pass'] ?? '');
-        $this->host = new Host($components['host'] ?? '');
-        $this->port = new Port($components['port'] ?? null);
-        $this->path = new Path($components['path'] ?? '');
-        $this->query = new Query($components['query'] ?? '');
-        $this->fragment = new Fragment($components['fragment'] ?? '');
+        if (isset($components['scheme'])) {
+            $this->scheme = new Scheme($components['scheme']);
+        }
 
-        $this->userinfo = new UserInfo(
-            $components['user'] ?? '',
-            $components['pass'] ?? null
-        );
+        if (isset($components['user'])) {
+            $this->user = new User($components['user']);
+        }
+
+        if (isset($components['pass'])) {
+            $this->pass = new Pass($components['pass']);
+        }
+
+        if (isset($components['host'])) {
+            $this->host = new Host($components['host']);
+        }
+
+        if (isset($components['port'])) {
+            $this->port = new Port($components['port']);
+        }
+
+        if (isset($components['path'])) {
+            $this->path = new Path($components['path']);
+        }
+
+        if (isset($components['query'])) {
+            $this->query = new Query($components['query']);
+        }
+
+        if (isset($components['fragment'])) {
+            $this->fragment = new Fragment($components['fragment']);
+        }
     }
 
     /**
-     * Gets the parsed URI component "scheme"
+     * Gets URI component "scheme"
      *
-     * @return ComponentInterface
+     * @return Scheme|null
      */
-    public function getScheme() : ComponentInterface
+    public function getScheme() : ?Scheme
     {
         return $this->scheme;
     }
 
     /**
-     * Gets the parsed URI component "user"
+     * Gets URI component "user"
      *
-     * @return ComponentInterface
+     * @return User|null
      */
-    public function getUser() : ComponentInterface
+    public function getUser() : ?User
     {
         return $this->user;
     }
 
     /**
-     * Gets the parsed URI component "pass"
+     * Gets URI component "pass"
      *
-     * @return ComponentInterface
+     * @return Pass|null
      */
-    public function getPass() : ComponentInterface
+    public function getPass() : ?Pass
     {
         return $this->pass;
     }
 
     /**
-     * Gets the parsed URI component "host"
+     * Gets URI component "host"
      *
-     * @return ComponentInterface
+     * @return Host|null
      */
-    public function getHost() : ComponentInterface
+    public function getHost() : ?Host
     {
         return $this->host;
     }
 
     /**
-     * Gets the parsed URI component "port"
+     * Gets URI component "port"
      *
-     * @return ComponentInterface
+     * @return Port|null
      */
-    public function getPort() : ComponentInterface
+    public function getPort() : ?Port
     {
         return $this->port;
     }
 
     /**
-     * Gets the parsed URI component "path"
+     * Gets URI component "path"
      *
-     * @return ComponentInterface
+     * @return Path|null
      */
-    public function getPath() : ComponentInterface
+    public function getPath() : ?Path
     {
         return $this->path;
     }
 
     /**
-     * Gets the parsed URI component "query"
+     * Gets URI component "query"
      *
-     * @return ComponentInterface
+     * @return Query|null
      */
-    public function getQuery() : ComponentInterface
+    public function getQuery() : ?Query
     {
         return $this->query;
     }
 
     /**
-     * Gets the parsed URI component "fragment"
+     * Gets URI component "fragment"
      *
-     * @return ComponentInterface
+     * @return Fragment|null
      */
-    public function getFragment() : ComponentInterface
+    public function getFragment() : ?Fragment
     {
         return $this->fragment;
     }
 
     /**
-     * Gets the parsed URI component "userinfo"
+     * Gets URI component "userinfo"
      *
-     * @return ComponentInterface
+     * @return UserInfo|null
      */
-    public function getUserInfo() : ComponentInterface
+    public function getUserInfo() : ?UserInfo
     {
-        return $this->userinfo;
+        if (isset($this->user)) {
+            return new UserInfo($this->user, $this->pass);
+        }
+
+        return null;
     }
 }

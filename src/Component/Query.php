@@ -17,12 +17,26 @@ namespace Sunrise\Uri\Component;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 
 /**
+ * Import functions
+ */
+use function is_string;
+use function preg_replace_callback;
+use function rawurlencode;
+
+/**
  * URI component "query"
  *
  * @link https://tools.ietf.org/html/rfc3986#section-3.4
  */
 class Query implements ComponentInterface
 {
+
+    /**
+     * Regular expression to normalize the component value
+     *
+     * @var string
+     */
+    private const NORMALIZE_REGEX = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
 
     /**
      * The component value
@@ -40,24 +54,22 @@ class Query implements ComponentInterface
      */
     public function __construct($value)
     {
-        if ('' === $value) {
+        if ($value === '') {
             return;
         }
 
-        if (! \is_string($value)) {
+        if (!is_string($value)) {
             throw new InvalidUriComponentException('URI component "query" must be a string');
         }
 
-        $regex = '/(?:(?:%[0-9A-Fa-f]{2}|[0-9A-Za-z\-\._~\!\$&\'\(\)\*\+,;\=\:@\/\?]+)|(.?))/u';
+        $this->value = preg_replace_callback(self::NORMALIZE_REGEX, function (array $match) : string {
+            /** @var array{0: string, 1?: string} $match */
 
-        $this->value = \preg_replace_callback($regex, function ($match) {
-            return isset($match[1]) ? \rawurlencode($match[1]) : $match[0];
+            return isset($match[1]) ? rawurlencode($match[1]) : $match[0];
         }, $value);
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return string
      */
     public function present() : string

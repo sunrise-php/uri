@@ -12,7 +12,7 @@ class UriParserTest extends TestCase
 
     public function testConstructor()
     {
-        $uri = new UriParser(self::TEST_URI);
+        $uri = new UriParser('');
 
         $this->assertInstanceOf(UriParser::class, $uri);
     }
@@ -22,7 +22,7 @@ class UriParserTest extends TestCase
         $this->expectException(InvalidUriException::class);
         $this->expectExceptionMessage('URI must be a string');
 
-        $uri = new UriParser(1234456);
+        $uri = new UriParser(null);
     }
 
     public function testGetScheme()
@@ -39,11 +39,25 @@ class UriParserTest extends TestCase
         $this->assertSame('user', $uri->getUser()->present());
     }
 
+    public function testGetEmptyUser()
+    {
+        $uri = new UriParser('//:password@localhost');
+
+        $this->assertSame('', $uri->getUser()->present());
+    }
+
     public function testGetPass()
     {
         $uri = new UriParser(self::TEST_URI);
 
         $this->assertSame('pass', $uri->getPass()->present());
+    }
+
+    public function testGetEmptyPass()
+    {
+        $uri = new UriParser('//username:@localhost');
+
+        $this->assertSame('', $uri->getPass()->present());
     }
 
     public function testGetHost()

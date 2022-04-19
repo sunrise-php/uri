@@ -20,11 +20,18 @@ class UserInfo implements ComponentInterface
 {
 
     /**
-     * The component value
+     * URI component "user"
      *
-     * @var string
+     * @var User
      */
-    protected $value = '';
+    protected $user;
+
+    /**
+     * URI component "pass"
+     *
+     * @var Pass|null
+     */
+    protected $pass;
 
     /**
      * Constructor of the class
@@ -34,22 +41,24 @@ class UserInfo implements ComponentInterface
      */
     public function __construct($user, $pass = null)
     {
-        $user = new User($user);
-        $this->value = $user->present();
+        $this->user = $user instanceof User ? $user : new User($user);
 
-        if (! (null === $pass)) {
-            $pass = new Pass($pass);
-            $this->value .= ':' . $pass->present();
+        if (isset($pass)) {
+            $this->pass = $pass instanceof Pass ? $pass : new Pass($pass);
         }
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return string
      */
     public function present() : string
     {
-        return $this->value;
+        $result = $this->user->present();
+
+        if (isset($this->pass)) {
+            $result .= ':' . $this->pass->present();
+        }
+
+        return $result;
     }
 }

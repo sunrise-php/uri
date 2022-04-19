@@ -1,7 +1,7 @@
 {
     "name": "sunrise/uri",
     "homepage": "https://github.com/sunrise-php/uri",
-    "description": "Simple URI wrapper for PHP 7.1+ based on RFC-3986, PSR-7 & PSR-17",
+    "description": "URI wrapper for PHP 7.1+ based on RFC-3986, PSR-7 and PSR-17",
     "license": "MIT",
     "keywords": [
         "fenric",
@@ -18,8 +18,8 @@
     "authors": [
         {
             "name": "Anatoly Fenric",
-            "email": "anatoly@fenric.ru",
-            "homepage": "https://anatoly.fenric.ru/"
+            "email": "afenric@gmail.com",
+            "homepage": "https://github.com/fenric"
         },
         {
             "name": "李昀陞 (Peter)",
@@ -27,6 +27,9 @@
             "homepage": "https://github.com/peter279k"
         }
     ],
+    "provide": {
+        "psr/http-message-implementation": "1.0"
+    },
     "require": {
         "php": "^7.1|^8.0",
         "psr/http-factory": "^1.0",
@@ -36,9 +39,6 @@
         "phpunit/phpunit": "7.5.20|9.5.0",
         "sunrise/coding-standard": "1.0.0"
     },
-    "provide": {
-        "psr/http-message-implementation": "1.0"
-    },
     "autoload": {
         "psr-4": {
             "Sunrise\\Uri\\": "src/"
@@ -46,8 +46,13 @@
     },
     "scripts": {
         "test": [
-            "phpunit --colors=always --coverage-text",
-            "phpcs"
+            "phpcs",
+            "psalm",
+            "XDEBUG_MODE=coverage phpunit --coverage-text --colors=always"
+        ],
+        "build": [
+            "phpdoc -d src/ -t phpdoc/",
+            "XDEBUG_MODE=coverage phpunit --coverage-html coverage/"
         ]
     }
 }

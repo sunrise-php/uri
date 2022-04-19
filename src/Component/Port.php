@@ -17,6 +17,11 @@ namespace Sunrise\Uri\Component;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 
 /**
+ * Import functions
+ */
+use function is_int;
+
+/**
  * URI component "port"
  *
  * @link https://tools.ietf.org/html/rfc3986#section-3.2.3
@@ -27,7 +32,7 @@ class Port implements ComponentInterface
     /**
      * The component value
      *
-     * @var null|int
+     * @var int|null
      */
     protected $value;
 
@@ -43,15 +48,15 @@ class Port implements ComponentInterface
         $min = 1;
         $max = 2 ** 16;
 
-        if (null === $value) {
+        if ($value === null) {
             return;
         }
 
-        if (! \is_int($value)) {
+        if (!is_int($value)) {
             throw new InvalidUriComponentException('URI component "port" must be an integer');
         }
 
-        if (! ($value >= $min && $value <= $max)) {
+        if (!($value >= $min && $value <= $max)) {
             throw new InvalidUriComponentException('Invalid URI component "port"');
         }
 
@@ -59,9 +64,7 @@ class Port implements ComponentInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @return null|int
+     * @return int|null
      */
     public function present() : ?int
     {

@@ -17,12 +17,26 @@ namespace Sunrise\Uri\Component;
 use Sunrise\Uri\Exception\InvalidUriComponentException;
 
 /**
+ * Import functions
+ */
+use function is_string;
+use function preg_match;
+use function strtolower;
+
+/**
  * URI component "scheme"
  *
  * @link https://tools.ietf.org/html/rfc3986#section-3.1
  */
 class Scheme implements ComponentInterface
 {
+
+    /**
+     * Regular expression to validate the component value
+     *
+     * @var string
+     */
+    private const VALIDATE_REGEX = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
 
     /**
      * The component value
@@ -40,17 +54,15 @@ class Scheme implements ComponentInterface
      */
     public function __construct($value)
     {
-        $regex = '/^(?:[A-Za-z][0-9A-Za-z\+\-\.]*)?$/';
-
-        if ('' === $value) {
+        if ($value === '') {
             return;
         }
 
-        if (! \is_string($value)) {
+        if (!is_string($value)) {
             throw new InvalidUriComponentException('URI component "scheme" must be a string');
         }
 
-        if (! \preg_match($regex, $value)) {
+        if (!preg_match(self::VALIDATE_REGEX, $value)) {
             throw new InvalidUriComponentException('Invalid URI component "scheme"');
         }
 
@@ -58,12 +70,10 @@ class Scheme implements ComponentInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return string
      */
     public function present() : string
     {
-        return \strtolower($this->value);
+        return strtolower($this->value);
     }
 }
